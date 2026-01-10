@@ -44,7 +44,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const signUp = async (credentials: SignUpCredentials) => {
-    const { error } = await supabase.auth.signUp(credentials);
+    const { error } = await supabase.auth.signUp({
+      email: credentials.email,
+      password: credentials.password,
+      options: {
+        data: {
+          name: credentials.name,
+        },
+      },
+    });
     return { error: error as Error | null };
   };
 
@@ -62,7 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       signUp,
       signOut,
     }),
-    [user, session, loading]
+    [user, session, loading],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

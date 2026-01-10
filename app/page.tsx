@@ -39,15 +39,15 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-background/80 backdrop-blur-sm z-50 border-b border-border">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <header className="bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-sm">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-              <Utensils className="w-5 h-5 text-primary" />
+            <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl">
+              <Utensils className="text-primary h-5 w-5" />
             </div>
-            <span className="text-xl font-semibold text-foreground">
+            <span className="text-foreground text-xl font-semibold">
               BuenPlato
             </span>
           </div>
@@ -58,27 +58,27 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-4">
+      <section className="px-4 pt-32 pb-20">
         <div className="container mx-auto max-w-4xl text-center">
-          <h1 className="text-4xl md:text-6xl  font-bold text-foreground leading-tight animate-fade-in">
+          <h1 className="text-foreground animate-fade-in text-4xl leading-tight font-bold md:text-6xl">
             Mejora tu alimentación
             <span className="text-primary"> sin esfuerzo</span>
           </h1>
           <p
-            className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-in"
+            className="text-muted-foreground animate-fade-in mx-auto mt-6 max-w-2xl text-lg md:text-xl"
             style={{ animationDelay: "0.1s" }}
           >
             Una herramienta sencilla para tomar mejores decisiones alimenticias
             durante tu jornada laboral. Sin dietas, sin conteo de calorías.
           </p>
           <div
-            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-fade-in"
+            className="animate-fade-in mt-10 flex flex-col justify-center gap-4 sm:flex-row"
             style={{ animationDelay: "0.2s" }}
           >
-            <Button size="lg" asChild className="h-14 px-8 text-lg gap-2">
+            <Button size="lg" asChild className="h-14 gap-2 px-8 text-lg">
               <Link href="/register">
                 Comenzar gratis
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="h-5 w-5" />
               </Link>
             </Button>
           </div>
@@ -86,27 +86,27 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-20 px-4 bg-muted/30">
+      <section className="bg-muted/30 px-4 py-20">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl md:text-4xl  font-bold text-center text-foreground mb-4">
+          <h2 className="text-foreground mb-4 text-center text-3xl font-bold md:text-4xl">
             Todo lo que necesitas
           </h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+          <p className="text-muted-foreground mx-auto mb-12 max-w-2xl text-center">
             Herramientas diseñadas para tu realidad: poco tiempo, presupuesto
             ajustado y la necesidad de energía para rendir en el trabajo.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => (
               <div
                 key={feature.title}
-                className="bg-card rounded-2xl p-6 border border-border hover:shadow-lg transition-shadow animate-fade-in"
+                className="bg-card border-border animate-fade-in rounded-2xl border p-6 transition-shadow hover:shadow-lg"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6" color="var(--foreground)" />
+                <div className="bg-primary/10 mb-4 flex h-12 w-12 items-center justify-center rounded-xl">
+                  <feature.icon className="text-primary h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
+                <h3 className="text-foreground mb-2 text-lg font-semibold">
                   {feature.title}
                 </h3>
                 <p className="text-muted-foreground">{feature.description}</p>
@@ -117,37 +117,37 @@ export default function Home() {
       </section>
 
       {/* Philosophy */}
-      <section className="py-20 px-4">
+      <section className="px-4 py-20">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-4xl  font-bold text-foreground mb-6">
+          <h2 className="text-foreground mb-6 text-3xl font-bold md:text-4xl">
             Nuestra filosofía
           </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-lg">
             Creemos en la mejora progresiva, no en la perfección. Pequeños
             cambios sostenibles que se acumulan con el tiempo para transformar
             tu bienestar.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="p-6">
-              <div className="text-4xl  font-bold text-primary mb-2">01</div>
-              <h3 className="font-semibold text-foreground mb-2">Realismo</h3>
-              <p className="text-sm text-muted-foreground">
+              <div className="text-primary mb-2 text-4xl font-bold">01</div>
+              <h3 className="text-foreground mb-2 font-semibold">Realismo</h3>
+              <p className="text-muted-foreground text-sm">
                 Trabajamos con las opciones que realmente tienes disponibles
               </p>
             </div>
             <div className="p-6">
-              <div className="text-4xl  font-bold text-primary mb-2">02</div>
-              <h3 className="font-semibold text-foreground mb-2">
+              <div className="text-primary mb-2 text-4xl font-bold">02</div>
+              <h3 className="text-foreground mb-2 font-semibold">
                 Simplicidad
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Sin registros complicados ni conteo de calorías
               </p>
             </div>
             <div className="p-6">
-              <div className="text-4xl  font-bold text-primary mb-2">03</div>
-              <h3 className="font-semibold text-foreground mb-2">Progreso</h3>
-              <p className="text-sm text-muted-foreground">
+              <div className="text-primary mb-2 text-4xl font-bold">03</div>
+              <h3 className="text-foreground mb-2 font-semibold">Progreso</h3>
+              <p className="text-muted-foreground text-sm">
                 Cada pequeña mejora cuenta hacia tu bienestar
               </p>
             </div>
@@ -156,27 +156,27 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 bg-primary/5">
+      <section className="bg-primary/5 px-4 py-20">
         <div className="container mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl md:text-4xl  font-bold text-foreground mb-6">
+          <h2 className="text-foreground mb-6 text-3xl font-bold md:text-4xl">
             ¿Listo para empezar?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-8 text-lg">
             Únete a BuenPlato y comienza a tomar mejores decisiones alimenticias
             hoy mismo.
           </p>
-          <Button size="lg" className="h-14 px-8 text-lg gap-2" asChild>
+          <Button size="lg" className="h-14 gap-2 px-8 text-lg" asChild>
             <Link href="/register">
               Crear cuenta gratis
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="h-5 w-5" />
             </Link>
           </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 border-t border-border">
-        <div className="container mx-auto text-center text-sm text-muted-foreground">
+      <footer className="border-border border-t px-4 py-8">
+        <div className="text-muted-foreground container mx-auto text-center text-sm">
           <p>© 2026 BuenPlato. Mejorando tu alimentación, un plato a la vez.</p>
         </div>
       </footer>
