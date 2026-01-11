@@ -7,7 +7,7 @@ import {
   SignInFormValues,
   signInSchema,
 } from "@/types/schemas/auth";
-import { useAuth } from "../use-auth";
+import { useAuth } from "@/contexts/auth-context";
 
 export function useAuthActions() {
   const router = useRouter();

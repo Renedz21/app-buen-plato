@@ -1,7 +1,7 @@
 "use client";
 
 import { LogOut, User, Utensils } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 
 export default function Navbar() {

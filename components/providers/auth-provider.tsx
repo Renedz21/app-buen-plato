@@ -1,26 +1,16 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { AuthContext } from "@/contexts/auth-context";
-import type {
-  AuthContextValue,
-  SignInCredentials,
-  SignUpCredentials,
-} from "@/types/auth";
+import type { SignInCredentials, SignUpCredentials } from "@/types/auth";
 import type { Session } from "@supabase/supabase-js";
-
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
 
 const supabase = createClient();
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const user = session?.user ?? null;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -38,39 +28,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signIn = async (credentials: SignInCredentials) => {
+  const signIn = useCallback(async (credentials: SignInCredentials) => {
     const { error } = await supabase.auth.signInWithPassword(credentials);
     return { error: error as Error | null };
-  };
+  }, []);
 
-  const signUp = async (credentials: SignUpCredentials) => {
+  const signUp = useCallback(async (credentials: SignUpCredentials) => {
     const { error } = await supabase.auth.signUp({
       email: credentials.email,
       password: credentials.password,
-      options: {
-        data: {
-          name: credentials.name,
-        },
-      },
+      options: { data: { name: credentials.name } },
     });
     return { error: error as Error | null };
-  };
+  }, []);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     return { error: error as Error | null };
-  };
+  }, []);
 
-  const value = useMemo<AuthContextValue>(
+  const value = useMemo(
     () => ({
-      user,
+      user: session?.user ?? null,
       session,
       loading,
       signIn,
       signUp,
       signOut,
     }),
-    [user, session, loading],
+    [session, loading, signIn, signUp, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
