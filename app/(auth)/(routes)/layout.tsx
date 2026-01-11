@@ -14,9 +14,9 @@ export default function AuthLayout({ children }: PropsWithChildren) {
           </Link>
         </Button>
       </header>
-      <main className="flex flex-1 items-center justify-center p-4">
+      <div className="flex flex-1 items-center justify-center p-4">
         {children}
-      </main>
+      </div>
     </section>
   );
 }

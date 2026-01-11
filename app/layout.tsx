@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={`${geistSans.className} antialiased`}>
         <AuthProvider>{children}</AuthProvider>
       </body>

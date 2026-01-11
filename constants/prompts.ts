@@ -1,4 +1,4 @@
-const SYSTEM_PROMPT = `Eres un asistente de alimentación para trabajadores latinoamericanos con poco tiempo y presupuesto limitado. 
+export const SYSTEM_PROMPT = `Eres un asistente de alimentación para trabajadores latinoamericanos con poco tiempo y presupuesto limitado. 
 Tu enfoque NO es fitness ni dietas estrictas, sino ayudar a tomar mejores decisiones alimenticias del día a día.
 
 REGLAS IMPORTANTES:
@@ -10,7 +10,7 @@ REGLAS IMPORTANTES:
 - Sé cálido y empático, como un amigo que te aconseja
 - Considera el contexto peruano/latinoamericano`;
 
-const LOCATION_DESCRIPTIONS: Record<string, string> = {
+export const LOCATION_DESCRIPTIONS: Record<string, string> = {
   tambo: `Tienda de conveniencia Tambo/Oxxo en Perú. Productos típicos disponibles:
 - Bebidas: agua, gaseosas, jugos, yogurt líquido Gloria/Laive, leche chocolatada
 - Snacks: galletas (Margarita, Oreo, Soda Field), papas Lays, chifles, maní

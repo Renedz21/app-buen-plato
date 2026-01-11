@@ -1,46 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Utensils, Apple, ChefHat, Clock, Droplets } from "lucide-react";
+import { features } from "@/constants/features";
+import { Apple } from "lucide-react";
 import Link from "next/link";
-
-type Feature = "menu" | "sos" | "cooking" | "breakfast" | "hydration";
-
-const features = [
-  {
-    id: "menu" as Feature,
-    icon: Utensils,
-    title: "Optimizador de Menú",
-    description: "Elige la mejor combinación del menú del día",
-    color: "bg-primary/10 text-primary",
-  },
-  {
-    id: "sos" as Feature,
-    icon: Apple,
-    title: "SOS Antojos",
-    description: "Sugerencias rápidas cuando tienes hambre",
-    color: "bg-success/10 text-success",
-  },
-  {
-    id: "cooking" as Feature,
-    icon: ChefHat,
-    title: "Cocina para 2 Días",
-    description: "Recetas simples que duran",
-    color: "bg-warning/10 text-warning-foreground",
-  },
-  {
-    id: "breakfast" as Feature,
-    icon: Clock,
-    title: "Desayuno en 5 Min",
-    description: "Ideas rápidas para la mañana",
-    color: "bg-accent text-accent-foreground",
-  },
-  {
-    id: "hydration" as Feature,
-    icon: Droplets,
-    title: "Hidratación",
-    description: "Recordatorios para tomar agua",
-    color: "bg-secondary text-secondary-foreground",
-  },
-];
 
 export default function QuickOptions() {
   return (
@@ -61,7 +22,7 @@ export default function QuickOptions() {
         style={{ animationDelay: "0.1s" }}
         asChild
       >
-        <Link href="/dashboard/sos-craving" prefetch={false}>
+        <Link href="/dashboard/craving" prefetch={false}>
           <div className="flex items-center gap-4">
             <div className="bg-primary-foreground/20 flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-105">
               <Apple className="size-8" />
@@ -78,35 +39,33 @@ export default function QuickOptions() {
 
       {/* Features Grid */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {features
-          .filter((f) => f.id !== "sos")
-          .map((feature, index) => (
-            <Button
-              key={feature.id}
-              className="animate-fade-in group h-[90px] justify-start rounded-2xl p-5 transition-all hover:shadow-md"
-              variant="outline"
-              style={{ animationDelay: `${(index + 2) * 0.1}s` }}
-              asChild
-            >
-              <Link href={`/dashboard/${feature.id}`} prefetch={false}>
-                <div className="flex items-start gap-4">
-                  <div
-                    className={`h-12 w-12 ${feature.color} flex items-center justify-center rounded-xl transition-transform group-hover:scale-105`}
-                  >
-                    <feature.icon className="size-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-foreground font-semibold">
-                      {feature.title}
-                    </h3>
-                    <p className="text-muted-foreground mt-1 text-sm">
-                      {feature.description}
-                    </p>
-                  </div>
+        {features.map((feature, index) => (
+          <Button
+            key={feature.id}
+            className="animate-fade-in group h-24 justify-start rounded-2xl p-5 transition-all hover:shadow-md"
+            variant="outline"
+            style={{ animationDelay: `${(index + 2) * 0.1}s` }}
+            asChild
+          >
+            <Link href={`/dashboard/${feature.id}`} prefetch={false}>
+              <div className="flex items-start gap-4">
+                <div
+                  className={`h-12 w-12 ${feature.color} flex items-center justify-center rounded-xl transition-transform group-hover:scale-105`}
+                >
+                  <feature.icon className="size-6" />
                 </div>
-              </Link>
-            </Button>
-          ))}
+                <div>
+                  <h3 className="text-foreground font-semibold">
+                    {feature.title}
+                  </h3>
+                  <p className="text-muted-foreground mt-1 text-sm">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </Button>
+        ))}
       </div>
     </>
   );
