@@ -5,11 +5,13 @@ import { cn } from "@/lib/utils";
 interface HungerLevelSelectorProps {
   selectedHungerLevel: HungerLevel | null;
   onSelectHungerLevel: (level: HungerLevel) => void;
+  isLoading: boolean;
 }
 
 export default function HungerLevelSelector({
   selectedHungerLevel,
   onSelectHungerLevel,
+  isLoading,
 }: HungerLevelSelectorProps) {
   return (
     <>
@@ -32,6 +34,7 @@ export default function HungerLevelSelector({
                 "border-primary bg-primary/10 text-primary",
             )}
             onClick={() => onSelectHungerLevel(level)}
+            disabled={isLoading}
           >
             {hungerLevels[level]}
           </Button>

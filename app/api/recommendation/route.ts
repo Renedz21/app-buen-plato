@@ -1,12 +1,11 @@
+import { openai } from "@ai-sdk/openai";
+import { Output, streamText } from "ai";
+import { SYSTEM_PROMPT } from "@/constants/prompts";
 import {
   getPromptAndSchema,
-  RecommendationRequest,
+  type RecommendationRequest,
   snackSchema,
 } from "@/types/schemas/ai-recommendations";
-
-import { openai } from "@ai-sdk/openai";
-import { streamText, Output } from "ai";
-import { SYSTEM_PROMPT } from "@/constants/prompts";
 
 export const maxDuration = 30;
 

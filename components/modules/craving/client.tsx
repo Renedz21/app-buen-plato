@@ -24,11 +24,13 @@ export default function CravingClient() {
       <LocationSelector
         selectedLocation={selectedLocation}
         onSelectLocation={setSelectedLocation}
+        isLoading={isLoading}
       />
 
       <HungerLevelSelector
         selectedHungerLevel={selectedHungerLevel}
         onSelectHungerLevel={setSelectedHungerLevel}
+        isLoading={isLoading}
       />
 
       <div className="mt-4 flex justify-center">
@@ -39,7 +41,7 @@ export default function CravingClient() {
           disabled={isLoading}
         >
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-          Analizar
+          {isLoading ? "Analizando..." : "Analizar"}
         </Button>
       </div>
 

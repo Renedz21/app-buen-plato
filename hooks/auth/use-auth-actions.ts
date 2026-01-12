@@ -1,13 +1,13 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/contexts/auth-context";
 import {
-  RegisterFormValues,
+  type RegisterFormValues,
   registerSchema,
-  SignInFormValues,
+  type SignInFormValues,
   signInSchema,
 } from "@/types/schemas/auth";
-import { useAuth } from "@/contexts/auth-context";
 
 export function useAuthActions() {
   const router = useRouter();
