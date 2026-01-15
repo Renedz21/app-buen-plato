@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
-import { snackSchema } from "@/types/schemas/ai-recommendations";
+import { useState } from "react";
 import type { HungerLevel, LocationStores } from "@/constants/locations";
+import { snackSchema } from "@/types/schemas/ai-recommendations";
 
 export function useCravingForm() {
   const [selectedLocation, setSelectedLocation] =
@@ -11,7 +11,7 @@ export function useCravingForm() {
   const [selectedHungerLevel, setSelectedHungerLevel] =
     useState<HungerLevel | null>(null);
 
-  const { object, submit, isLoading } = useObject({
+  const { object, submit, isLoading, clear } = useObject({
     api: "/api/recommendation",
     schema: snackSchema,
   });
@@ -31,6 +31,7 @@ export function useCravingForm() {
   const resetForm = () => {
     setSelectedLocation(null);
     setSelectedHungerLevel(null);
+    clear();
   };
 
   return {

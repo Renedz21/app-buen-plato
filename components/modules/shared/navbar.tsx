@@ -3,6 +3,7 @@
 import { LogOut, User, Utensils } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { Button } from "@/components/ui/button";
+import { ModeToggle } from "./theme-toggle";
 
 export default function Navbar() {
   const { user } = useAuth();
@@ -22,9 +23,12 @@ export default function Navbar() {
             <User className="h-4 w-4" />
             <span>{user?.email}</span>
           </div>
-          <Button variant="ghost" size="icon">
-            <LogOut className="h-5 w-5" />
-          </Button>
+          <div>
+            <Button variant="ghost" size="icon">
+              <LogOut className="h-5 w-5" />
+            </Button>
+            <ModeToggle />
+          </div>
         </div>
       </div>
     </header>

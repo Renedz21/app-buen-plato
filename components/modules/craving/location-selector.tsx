@@ -6,11 +6,13 @@ import { Store } from "lucide-react";
 interface LocationSelectorProps {
   selectedLocation: LocationStores | null;
   onSelectLocation: (location: LocationStores) => void;
+  isLoading: boolean;
 }
 
 export default function LocationSelector({
   selectedLocation,
   onSelectLocation,
+  isLoading,
 }: LocationSelectorProps) {
   return (
     <div className="flex flex-1 flex-wrap justify-center gap-4">
@@ -21,9 +23,10 @@ export default function LocationSelector({
           className={cn(
             "flex h-18 w-full items-center justify-start gap-4 rounded-xl transition-all md:h-20 md:w-auto md:justify-center",
             selectedLocation === location &&
-              "border-primary bg-primary/10 text-primary",
+              "border-primary bg-primary/10 text-primary dark:border-primary dark:bg-primary/10",
           )}
           onClick={() => onSelectLocation(location)}
+          disabled={isLoading}
         >
           <div className="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-full">
             <Store className="size-6" />
