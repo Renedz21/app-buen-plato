@@ -136,12 +136,14 @@ export const useFileUpload = (options: FileUploadOptions = {}) => {
             }
 
             for (const file of filesToProcess) {
-                // Verificar duplicados en modo múltiple
                 if (multiple) {
-                    const isDuplicate = state.files.some(
+                    const isDuplicateInState = state.files.some(
                         (f) => f.file.name === file.name && f.file.size === file.size
                     );
-                    if (isDuplicate) continue;
+                    const isDuplicateInBatch = validFiles.some(
+                        (f) => f.file.name === file.name && f.file.size === file.size
+                    );
+                    if (isDuplicateInState || isDuplicateInBatch) continue;
                 }
 
                 // Validar tamaño

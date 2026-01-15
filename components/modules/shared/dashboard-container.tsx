@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { PropsWithChildren } from "react";
+import BackButton from "./back-button";
 
 type DashboardContainerProps = PropsWithChildren<{
   icon: LucideIcon;
@@ -15,6 +16,7 @@ export default function DashboardContainer({
 }: DashboardContainerProps) {
   return (
     <div className="space-y-8">
+      <BackButton />
       <div className="mb-6 text-center md:mb-8">
         <div className="bg-primary/10 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full md:h-20 md:w-20">
           <Icon className="text-primary size-8 md:size-10" />

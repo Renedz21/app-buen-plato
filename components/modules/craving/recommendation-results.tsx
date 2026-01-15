@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Sparkles, Loader2 } from "lucide-react";
+import { RefreshCw, Sparkles, Loader2, AlertTriangle } from "lucide-react";
 
 interface RecommendationResultsProps {
   recommendations?: Array<
@@ -87,6 +87,7 @@ export default function RecommendationResults({
           variant="destructive"
           className="animate-in fade-in slide-in-from-bottom-4 duration-500"
         >
+          <AlertTriangle />
           <AlertTitle>Evitar:</AlertTitle>
           <AlertDescription>{avoid}</AlertDescription>
         </Alert>

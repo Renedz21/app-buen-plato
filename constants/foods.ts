@@ -1,15 +1,15 @@
 export const exampleEntradas = [
-    'Sopa de pollo',
-    'Ensalada fresca',
-    'Ceviche',
-    'Causa rellena',
-    'Papa a la huancaína'
+  "Sopa de pollo",
+  "Ensalada fresca",
+  "Tequeños de queso",
+  "Causa rellena",
+  "Papa a la huancaína",
 ];
 
 export const examplePlatos = [
-    'Lomo saltado',
-    'Pollo a la brasa',
-    'Arroz con pollo',
-    'Seco de res',
-    'Pescado frito'
+  "Lentejas con pollo",
+  "Lomo saltado",
+  "Arroz con pollo",
+  "Seco de res",
+  "Tallarines con pollo",
 ];
