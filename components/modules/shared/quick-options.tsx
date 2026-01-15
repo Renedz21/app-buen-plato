@@ -45,9 +45,16 @@ export default function QuickOptions() {
             className="animate-fade-in group h-24 justify-start rounded-2xl p-5 transition-all hover:shadow-md"
             variant="outline"
             style={{ animationDelay: `${(index + 2) * 0.1}s` }}
+            disabled={feature.isEnabled}
             asChild
           >
-            <Link href={`/dashboard/${feature.id}`} prefetch={false}>
+            <Link
+              href={`/dashboard/${feature.id}`}
+              prefetch={false}
+              className={
+                feature.isEnabled ? "" : "pointer-events-none opacity-50"
+              }
+            >
               <div className="flex items-start gap-4">
                 <div
                   className={`h-12 w-12 ${feature.color} flex items-center justify-center rounded-xl transition-transform group-hover:scale-105`}
@@ -56,10 +63,12 @@ export default function QuickOptions() {
                 </div>
                 <div>
                   <h3 className="text-foreground font-semibold">
-                    {feature.title}
+                    {feature.isEnabled
+                      ? feature.title
+                      : "Próximamente estará disponible"}
                   </h3>
                   <p className="text-muted-foreground mt-1 text-sm">
-                    {feature.description}
+                    {feature.isEnabled ? feature.description : ""}
                   </p>
                 </div>
               </div>

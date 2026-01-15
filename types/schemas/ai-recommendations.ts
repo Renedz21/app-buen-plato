@@ -59,10 +59,11 @@ export const breakfastSchema = z.object({
 
 export const recipeSchema = z.object({
   recipe: z.object({
+    id: z.string(),
     name: z.string(),
     time: z.string(),
     portions: z.number(),
-    image: z.string(),
+    emoji: z.string(),
     description: z.string(),
     ingredients: z.array(z.string()),
     steps: z.array(z.string()),

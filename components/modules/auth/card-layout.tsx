@@ -19,7 +19,7 @@ export default function CardLayout({
   children,
 }: CardLayoutProps) {
   return (
-    <Card className="animate-fade-in w-full max-w-md border-0 shadow-lg">
+    <Card className="animate-fade-in w-full max-w-md">
       <CardHeader className="space-y-4 text-center">
         <div className="bg-primary/10 mx-auto flex h-16 w-16 items-center justify-center rounded-2xl">
           <Utensils className="text-primary h-8 w-8" />

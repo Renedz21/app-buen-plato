@@ -9,6 +9,7 @@ export const features = [
     title: "Optimizador de Menú",
     description: "Elige la mejor combinación del menú del día",
     color: "bg-primary/10 text-primary",
+    isEnabled: true,
   },
   {
     id: "cooking" as Feature,
@@ -16,6 +17,7 @@ export const features = [
     title: "Cocina para 2 Días",
     description: "Recetas simples que duran",
     color: "bg-secondary/70 text-secondary-foreground",
+    isEnabled: true,
   },
   {
     id: "breakfast" as Feature,
@@ -23,6 +25,7 @@ export const features = [
     title: "Desayuno en 5 Min",
     description: "Ideas rápidas para la mañana",
     color: "bg-accent/70 text-accent-foreground",
+    isEnabled: true,
   },
   {
     id: "hydration" as Feature,
@@ -30,5 +33,6 @@ export const features = [
     title: "Hidratación",
     description: "Recordatorios para tomar agua",
     color: "bg-secondary/70 text-secondary-foreground",
+    isEnabled: false,
   },
 ];
