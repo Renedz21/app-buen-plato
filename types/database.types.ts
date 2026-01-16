@@ -330,6 +330,37 @@ export type Database = {
           },
         ];
       };
+      user_credits: {
+        Row: {
+          user_id: string;
+          credits_remaining: number;
+          last_reset_date: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          credits_remaining?: number;
+          last_reset_date?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          credits_remaining?: number;
+          last_reset_date?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_credits_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;

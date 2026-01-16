@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SubscriptionContext } from "@/contexts/subscription-context";
+import { CreditsProvider } from "@/components/providers/credits-provider";
 import type { Subscription } from "@/types/subscription";
 
 const supabase = createClient();
@@ -94,7 +95,9 @@ export function SubscriptionProvider({
 
   return (
     <SubscriptionContext.Provider value={value}>
-      {children}
+      <CreditsProvider userId={userId} isPro={isPro}>
+        {children}
+      </CreditsProvider>
     </SubscriptionContext.Provider>
   );
 }

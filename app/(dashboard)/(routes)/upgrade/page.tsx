@@ -1,25 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { polarClient } from "@/lib/polar";
-import { Check, Sparkles, Zap } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { cn } from "@/lib/utils";
+import { Check, Zap } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-// Plan features configuration - hoisted to module scope (Rule 6.3)
 const freePlanFeatures = [
-  "Acceso básico a recomendaciones",
-  "3 consultas diarias",
-  "Optimizador de menú básico",
-  "Recetas simples para cocinar",
+  "5 consultas diarias con IA",
+  "Recomendaciones de snacks personalizadas",
+  "Optimizador de menús (entrada + plato)",
+  "Recetas de desayuno según ingredientes",
+  "Generación de recetas de cocina",
+  "Acceso a todos los módulos",
 ];
 
 const proPlanFeatures = [
   "Todo lo incluido en Free, más:",
-  "Consultas ilimitadas",
-  "Prioridad en respuestas",
-  "Recetas personalizadas avanzadas",
-  "Planificación semanal de menús",
-  "Sugerencias nutricionales detalladas",
+  "Consultas ilimitadas con IA",
+  "Sin restricciones de uso diario",
+  "Acceso prioritario a nuevas funciones",
   "Soporte prioritario",
 ];
+
+const DOLLAR_TO_PEN = 3.36;
 
 interface PlanCardProps {
   title: string;
@@ -33,6 +37,7 @@ interface PlanCardProps {
   iconBgColor: string;
   isPopular?: boolean;
   productId: string;
+  customerExternalId: string;
 }
 
 function PlanCard({
@@ -47,9 +52,10 @@ function PlanCard({
   iconBgColor,
   isPopular,
   productId,
+  customerExternalId,
 }: Partial<PlanCardProps>) {
   return (
-    <div className="group border-border bg-card relative flex flex-col overflow-hidden rounded-3xl border p-8 shadow-sm transition-all hover:shadow-xl">
+    <div className="group border-border bg-card relative flex flex-col overflow-hidden rounded-3xl border p-8 shadow-sm transition-all hover:shadow-2xl">
       {isPopular && (
         <div className="bg-primary text-primary-foreground absolute top-8 -right-12 rotate-45 px-12 py-1 text-center text-xs font-semibold shadow-md">
           Más popular
@@ -59,7 +65,10 @@ function PlanCard({
       {/* Icon */}
       <div className="mb-6 flex items-center justify-between">
         <div
-          className={`flex h-16 w-16 items-center justify-center rounded-2xl ${iconBgColor} transition-transform group-hover:scale-110`}
+          className={cn(
+            "flex h-16 w-16 items-center justify-center rounded-2xl",
+            iconBgColor,
+          )}
         >
           {icon}
         </div>
@@ -77,6 +86,20 @@ function PlanCard({
           <span className="text-foreground text-5xl font-bold">{price}</span>
         </div>
         <p className="text-muted-foreground mt-1 text-sm">{priceDescription}</p>
+        {price &&
+          price !== "USD 0" &&
+          (() => {
+            const usdAmount = parseFloat(price.replace("USD ", "").trim());
+            if (!Number.isNaN(usdAmount)) {
+              const penAmount = Math.round(usdAmount * DOLLAR_TO_PEN);
+              return (
+                <p className="text-muted-foreground mt-1 text-xs">
+                  (Aprox. {penAmount} PEN al tipo de cambio actual)
+                </p>
+              );
+            }
+            return null;
+          })()}
       </div>
 
       {/* CTA Button */}
@@ -86,7 +109,7 @@ function PlanCard({
         asChild
       >
         <Link
-          href={`/api/checkout?products=${productId}&customerEmail=edzon@gmail.com`}
+          href={`/api/checkout?products=${productId}&customerEmail=edzon@gmail.com&customerExternalId=${customerExternalId}`}
         >
           {buttonText}
         </Link>
@@ -115,8 +138,20 @@ const getProducts = async () => {
   return products.result.items ?? [];
 };
 
+const getCurrentUser = async () => {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user?.id;
+};
+
 export default async function UpgradePage() {
-  const products = await getProducts();
+  const [products, user] = await Promise.all([getProducts(), getCurrentUser()]);
+
+  if (!user) {
+    redirect("/login");
+  }
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -133,33 +168,41 @@ export default async function UpgradePage() {
 
       {/* Plans Grid */}
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {/* Free Plan */}
-        <PlanCard
-          title="Free"
-          description="Conoce a Buen Plato"
-          price="USD 0"
-          priceDescription="Gratis para siempre"
-          features={freePlanFeatures}
-          buttonText="Usar Buen Plato gratis"
-          buttonVariant="outline"
-          icon={<Sparkles className="text-foreground h-8 w-8" />}
-          iconBgColor="bg-muted"
-          productId=""
-        />
-
         {products.map((product) => (
           <PlanCard
             key={product.id}
             title={product.name}
-            price="USD 17"
-            priceDescription="/ mes facturado mensualmente"
-            features={proPlanFeatures}
-            buttonText="Obtener plan Pro"
-            buttonVariant="default"
-            icon={<Zap className="text-primary h-8 w-8" />}
-            iconBgColor="bg-primary/10"
-            isPopular
+            price={product.name.includes("Pro") ? "USD 9.99" : "USD 0"}
+            priceDescription={
+              product.name.includes("Pro")
+                ? "/ mes facturado mensualmente"
+                : "Gratis para siempre"
+            }
+            features={
+              product.name.includes("Pro") ? proPlanFeatures : freePlanFeatures
+            }
+            buttonText={
+              product.name.includes("Pro")
+                ? "Obtener plan Plan Pro"
+                : "Usar Buen Plato gratis"
+            }
+            buttonVariant={product.name.includes("Pro") ? "default" : "outline"}
+            icon={
+              <Zap
+                className={cn(
+                  "text-primary h-8 w-8",
+                  product.name.includes("Pro")
+                    ? "text-primary"
+                    : "text-foreground",
+                )}
+              />
+            }
+            iconBgColor={
+              product.name.includes("Pro") ? "bg-primary/10" : "bg-muted"
+            }
+            isPopular={product.name.includes("Pro")}
             productId={product.id}
+            customerExternalId={user ?? ""}
           />
         ))}
       </div>

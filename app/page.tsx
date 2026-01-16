@@ -48,7 +48,7 @@ export default function Home() {
               <Utensils className="text-primary h-5 w-5" />
             </div>
             <span className="text-foreground text-xl font-semibold">
-              BuenPlato
+              NutriYa
             </span>
           </div>
           <Button variant="ghost" asChild>
@@ -162,7 +162,7 @@ export default function Home() {
             ¿Listo para empezar?
           </h2>
           <p className="text-muted-foreground mb-8 text-lg">
-            Únete a BuenPlato y comienza a tomar mejores decisiones alimenticias
+            Únete a NutriYa y comienza a tomar mejores decisiones alimenticias
             hoy mismo.
           </p>
           <Button size="lg" className="h-14 gap-2 px-8 text-lg" asChild>
@@ -177,7 +177,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-border border-t px-4 py-8">
         <div className="text-muted-foreground container mx-auto text-center text-sm">
-          <p>© 2026 BuenPlato. Mejorando tu alimentación, un plato a la vez.</p>
+          <p>© 2026 NutriYa. Mejorando tu alimentación, un plato a la vez.</p>
         </div>
       </footer>
     </div>
