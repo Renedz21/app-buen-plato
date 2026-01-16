@@ -284,6 +284,52 @@ export type Database = {
         };
         Relationships: [];
       };
+      subscriptions: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          polar_customer_id: string | null;
+          polar_subscription_id: string | null;
+          status: string | null;
+          plan: string | null;
+          current_period_start: string | null;
+          current_period_end: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          polar_customer_id?: string | null;
+          polar_subscription_id?: string | null;
+          status?: string | null;
+          plan?: string | null;
+          current_period_start?: string | null;
+          current_period_end?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          user_id?: string | null;
+          polar_customer_id?: string | null;
+          polar_subscription_id?: string | null;
+          status?: string | null;
+          plan?: string | null;
+          current_period_start?: string | null;
+          current_period_end?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;

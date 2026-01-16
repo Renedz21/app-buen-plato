@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { AuthContext } from "@/contexts/auth-context";
+import { SubscriptionProvider } from "@/components/providers/subscription-provider";
 import type { SignInCredentials, SignUpCredentials } from "@/types/auth";
 import type { Session } from "@supabase/supabase-js";
 
@@ -59,5 +60,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [session, loading, signIn, signUp, signOut],
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      <SubscriptionProvider userId={session?.user?.id ?? null}>
+        {children}
+      </SubscriptionProvider>
+    </AuthContext.Provider>
+  );
 }
