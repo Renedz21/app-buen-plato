@@ -23,6 +23,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useIsPro } from "@/contexts/subscription-context";
 import { useCredits } from "@/hooks/shared/use-credits";
 import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
+import { SaveMenuModal } from "./save-menu-modal";
 
 export default function FoodCards({
   savedMenus,
@@ -48,6 +49,7 @@ export default function FoodCards({
   const isPro = useIsPro();
   const { hasCredits, consumeCredit } = useCredits();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
 
   const handleSubmit = async () => {
     if (!isPro && !hasCredits) {
@@ -72,6 +74,7 @@ export default function FoodCards({
   };
 
   const canAnalyze = entradas.length >= 1 && platos.length >= 1;
+  const canSaveMenu = object?.betterOption?.entrada && object?.betterOption?.plato;
 
   return (
     <>
@@ -177,6 +180,16 @@ export default function FoodCards({
                     <AlertDescription>{object.tip}</AlertDescription>
                   </Alert>
                 )}
+
+                <div className="mt-4 flex justify-end">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowSaveModal(true)}
+                    disabled={!canSaveMenu}
+                  >
+                    Guardar menú
+                  </Button>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -187,6 +200,15 @@ export default function FoodCards({
         isOpen={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
       />
+
+      {canSaveMenu && (
+        <SaveMenuModal
+          isOpen={showSaveModal}
+          onClose={() => setShowSaveModal(false)}
+          entrada={object.betterOption.entrada}
+          plato={object.betterOption.plato}
+        />
+      )}
     </>
   );
 }
