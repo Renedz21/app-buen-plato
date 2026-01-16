@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
+import nutriyaLogo from "@/public/images/nutriya_logo.avif";
 
 const features = [
   {
@@ -18,7 +20,7 @@ const features = [
   {
     icon: Apple,
     title: "SOS Antojos",
-    description: "Sugerencias saludables cuando te da hambre",
+    description: "Ideas prácticas cuando te da hambre",
   },
   {
     icon: ChefHat,
@@ -45,7 +47,13 @@ export default function Home() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl">
-              <Utensils className="text-primary h-5 w-5" />
+              <Image
+                src={nutriyaLogo}
+                alt="NutriYa"
+                width={50}
+                height={40}
+                className="object-contain"
+              />
             </div>
             <span className="text-foreground text-xl font-semibold">
               NutriYa
@@ -61,15 +69,15 @@ export default function Home() {
       <section className="px-4 pt-32 pb-20">
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="text-foreground animate-fade-in text-4xl leading-tight font-bold md:text-6xl">
-            Mejora tu alimentación
+            Organiza tus comidas
             <span className="text-primary"> sin esfuerzo</span>
           </h1>
           <p
             className="text-muted-foreground animate-fade-in mx-auto mt-6 max-w-2xl text-lg md:text-xl"
             style={{ animationDelay: "0.1s" }}
           >
-            Una herramienta sencilla para tomar mejores decisiones alimenticias
-            durante tu jornada laboral. Sin dietas, sin conteo de calorías.
+            Una herramienta sencilla para tomar mejores decisiones de comida
+            durante tu jornada laboral. Sin complicaciones, sin estrés.
           </p>
           <div
             className="animate-fade-in mt-10 flex flex-col justify-center gap-4 sm:flex-row"
@@ -124,8 +132,8 @@ export default function Home() {
           </h2>
           <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-lg">
             Creemos en la mejora progresiva, no en la perfección. Pequeños
-            cambios sostenibles que se acumulan con el tiempo para transformar
-            tu bienestar.
+            cambios sostenibles que se acumulan con el tiempo para facilitar
+            tu día a día.
           </p>
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="p-6">
@@ -148,7 +156,7 @@ export default function Home() {
               <div className="text-primary mb-2 text-4xl font-bold">03</div>
               <h3 className="text-foreground mb-2 font-semibold">Progreso</h3>
               <p className="text-muted-foreground text-sm">
-                Cada pequeña mejora cuenta hacia tu bienestar
+                Cada pequeña mejora cuenta para tu día a día
               </p>
             </div>
           </div>
@@ -162,7 +170,7 @@ export default function Home() {
             ¿Listo para empezar?
           </h2>
           <p className="text-muted-foreground mb-8 text-lg">
-            Únete a NutriYa y comienza a tomar mejores decisiones alimenticias
+            Únete a NutriYa y comienza a tomar mejores decisiones de comida
             hoy mismo.
           </p>
           <Button size="lg" className="h-14 gap-2 px-8 text-lg" asChild>
@@ -177,7 +185,10 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-border border-t px-4 py-8">
         <div className="text-muted-foreground container mx-auto text-center text-sm">
-          <p>© 2026 NutriYa. Mejorando tu alimentación, un plato a la vez.</p>
+          <p>© 2026 NutriYa. Organizando tus comidas, un plato a la vez.</p>
+          <p className="mt-3 text-xs opacity-75">
+            Esta aplicación proporciona únicamente contenido informativo y no ofrece asesoramiento médico, nutricional ni profesional.
+          </p>
         </div>
       </footer>
     </div>

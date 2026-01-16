@@ -111,16 +111,16 @@ Entradas disponibles: ${userEntradas.join(", ") || "ninguna"}
 Platos disponibles: ${userPlatos.join(", ") || "ninguno"}
 
 Analiza esta combinación considerando:
-1. Digestión para la tarde (evitar somnolencia post-almuerzo)
-2. Nutrición balanceada
-3. Si es muy pesada o muy ligera
+1. Comodidad para la tarde (evitar sensación de pesadez)
+2. Variedad de opciones
+3. Si es muy abundante o muy ligera
 4. Si hay mejor opción entre las disponibles
 
 IMPORTANTE: 
 - Solo sugiere opciones que EXISTAN en la lista del usuario
 - Si la combinación es buena, dilo claramente
 - Si hay algo mejor disponible, indica cuál y por qué
-- Considera que el usuario trabaja y necesita energía sin pesadez`;
+- Considera que el usuario trabaja y necesita sentirse satisfecho sin pesadez`;
 }
 
 export function buildRecipePrompt(
@@ -129,13 +129,14 @@ export function buildRecipePrompt(
   return `El usuario quiere una receta simple, económica y que dure varios días.
 Nivel de experiencia cocinando: ${context.cookingExperience || "beginner"}
 Presupuesto: ${context.budgetLevel || "medium"}
-${context.dietaryPreferences?.length ? `Preferencias: ${context.dietaryPreferences.join(", ")}` : ""}
+${context.dietaryPreferences?.length ? `Preferencias alimentarias: ${context.dietaryPreferences.join(", ")}` : ""}
 
 Genera una receta que sea:
 - Fácil de preparar
 - Económica con ingredientes accesibles en Perú/Latinoamérica
 - Que rinda para 3-4 porciones
-- Que se conserve bien 2 días`;
+- Que se conserve bien 2 días
+- Práctica para la rutina del usuario`;
 }
 
 export function buildBreakfastPrompt(
@@ -163,7 +164,8 @@ Cada receta debe:
 IMPORTANTE:
 - Si los ingredientes son muy limitados, sugiere opciones creativas pero realistas
 - No asumas ingredientes que no mencionó
-- Si no puede hacer mucho, dilo honestamente y sugiere qué conseguir`;
+- Si no puede hacer mucho, dilo honestamente y sugiere qué conseguir
+- Enfócate en practicidad y velocidad de preparación`;
 }
 
 export function getPromptAndSchema(

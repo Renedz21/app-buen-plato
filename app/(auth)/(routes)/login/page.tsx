@@ -12,9 +12,10 @@ import { Controller } from "react-hook-form";
 import { useAuthActions } from "@/hooks/auth/use-auth-actions";
 import CardLayout from "@/components/modules/auth/card-layout";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
-  const { signInForm, handleSignIn, isSignInLoading } = useAuthActions();
+  const { signInForm, handleSignIn } = useAuthActions();
   return (
     <CardLayout
       title="Iniciar sesión"
@@ -41,7 +42,7 @@ export default function LoginPage() {
                     type="email"
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error?.message ? { message: fieldState.error.message } : undefined]} />
                   )}
                 </Field>
               )}
@@ -63,7 +64,7 @@ export default function LoginPage() {
                     type="password"
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error?.message ? { message: fieldState.error.message } : undefined]} />
                   )}
                 </Field>
               )}
@@ -71,10 +72,12 @@ export default function LoginPage() {
             <Field orientation="horizontal" className="w-full">
               <Button
                 type="submit"
-                disabled={isSignInLoading}
                 className="w-full"
+                disabled={signInForm.formState.isSubmitting}
               >
-                {isSignInLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+                {signInForm.formState.isSubmitting ? (
+                  <Loader2 className="animate-spin" />
+                ): "Iniciar sesión"}
               </Button>
             </Field>
           </FieldGroup>

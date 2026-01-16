@@ -17,7 +17,7 @@ export const recipes: Recipe[] = [
     time: "45 min",
     portions: 4,
     emoji: "🍲",
-    description: "Económico, nutritivo y perfecto para guardar",
+    description: "Económico, práctico y perfecto para guardar",
     ingredients: [
       "1 taza de lentejas",
       "2 zanahorias picadas",
@@ -65,7 +65,7 @@ export const recipes: Recipe[] = [
     time: "30 min",
     portions: 3,
     emoji: "🥡",
-    description: "Versión nutritiva del clásico con quinua",
+    description: "Versión alternativa del clásico con quinua",
     ingredients: [
       "1.5 tazas de quinua cocida (del día anterior)",
       "2 huevos",

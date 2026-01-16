@@ -30,7 +30,7 @@ export default function QuickOptions() {
             <div>
               <h2 className="text-2xl font-semibold">¿Tienes hambre?</h2>
               <p className="text-primary-foreground/80 text-lg">
-                Te doy sugerencias saludables al instante
+                Te doy ideas prácticas al instante
               </p>
             </div>
           </div>

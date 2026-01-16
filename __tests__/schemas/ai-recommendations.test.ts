@@ -14,7 +14,7 @@ describe("snackSchema", () => {
         {
           name: "Yogurt con granola",
           price_range: "S/ 5-8",
-          reason: "Ligero y nutritivo",
+          reason: "Ligero y práctico",
           icon: "🥛",
         },
       ],

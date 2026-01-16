@@ -12,9 +12,10 @@ import { Controller } from "react-hook-form";
 import { useAuthActions } from "@/hooks/auth/use-auth-actions";
 import CardLayout from "@/components/modules/auth/card-layout";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
-  const { registerForm, handleRegister, isRegisterLoading } = useAuthActions();
+  const { registerForm, handleRegister } = useAuthActions();
   return (
     <CardLayout
       title="Crear cuenta"
@@ -41,7 +42,7 @@ export default function RegisterPage() {
                     type="text"
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error?.message ? { message: fieldState.error.message } : undefined]} />
                   )}
                 </Field>
               )}
@@ -61,7 +62,7 @@ export default function RegisterPage() {
                     type="email"
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error?.message ? { message: fieldState.error.message } : undefined]} />
                   )}
                 </Field>
               )}
@@ -83,7 +84,7 @@ export default function RegisterPage() {
                     type="password"
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error?.message ? { message: fieldState.error.message } : undefined]} />
                   )}
                 </Field>
               )}
@@ -105,7 +106,7 @@ export default function RegisterPage() {
                     type="password"
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error?.message ? { message: fieldState.error.message } : undefined]} />
                   )}
                 </Field>
               )}
@@ -113,10 +114,12 @@ export default function RegisterPage() {
             <Field orientation="horizontal" className="w-full">
               <Button
                 type="submit"
-                disabled={isRegisterLoading}
+                disabled={registerForm.formState.isSubmitting}
                 className="w-full"
               >
-                {isRegisterLoading ? "Registrando..." : "Registrar"}
+                {registerForm.formState.isSubmitting ? (
+                  <Loader2 className="animate-spin" />
+                ): "Registrar"}
               </Button>
             </Field>
           </FieldGroup>

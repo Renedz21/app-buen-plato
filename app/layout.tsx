@@ -12,7 +12,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "NutriYa",
   description:
-    "NutriYa es una aplicación que te ayuda a mejorar tu salud y tu bienestar.",
+    "NutriYa es un software de apoyo para organizar tus decisiones diarias de comida.",
 };
 
 export default function RootLayout({

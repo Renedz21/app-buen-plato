@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 const freePlanFeatures = [
   "5 consultas diarias con IA",
-  "Recomendaciones de snacks personalizadas",
+  "Sugerencias de snacks personalizadas",
   "Optimizador de menús (entrada + plato)",
   "Recetas de desayuno según ingredientes",
   "Generación de recetas de cocina",
@@ -162,7 +162,7 @@ export default async function UpgradePage() {
         </h1>
         <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
           Elige el plan que mejor se adapte a tus necesidades y comienza a
-          disfrutar de una alimentación saludable
+          organizar mejor tus comidas diarias
         </p>
       </div>
 
@@ -211,6 +211,13 @@ export default async function UpgradePage() {
       <p className="text-muted-foreground mt-12 text-center text-sm">
         Todos los planes incluyen actualizaciones gratuitas y acceso a nuevas
         funciones
+      </p>
+      
+      {/* Disclaimer */}
+      <p className="text-muted-foreground mt-6 text-center text-xs opacity-75">
+        Al suscribirte, confirmas que entiendes que este es un servicio de software informativo.
+        <br />
+        Esta aplicación proporciona únicamente contenido informativo y no ofrece asesoramiento médico, nutricional ni profesional.
       </p>
     </div>
   );
