@@ -201,12 +201,12 @@ export default function FoodCards({
         onClose={() => setShowUpgradeModal(false)}
       />
 
-      {canSaveMenu && (
+      {canSaveMenu && object.betterOption?.entrada && object.betterOption?.plato && (
         <SaveMenuModal
           isOpen={showSaveModal}
           onClose={() => setShowSaveModal(false)}
-          entrada={object.betterOption.entrada}
-          plato={object.betterOption.plato}
+          entrada={object.betterOption.entrada!}
+          plato={object.betterOption.plato!}
         />
       )}
     </>
