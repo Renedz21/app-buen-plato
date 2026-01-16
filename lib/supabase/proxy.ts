@@ -36,9 +36,9 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Rutas públicas que no requieren autenticación
-  const publicRoutes = ["/", "/login", "/auth"];
+  const publicRoutes = ["/", "/login", "/register"];
   const isPublicRoute = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith("/auth"),
+    (route) => pathname === route || pathname.startsWith("/register"),
   );
 
   // Si el usuario NO está logueado y intenta acceder a una ruta protegida

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -19,6 +20,9 @@ import type { Tables } from "@/types/database.types";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
 import { menuSchema } from "@/types/schemas/ai-recommendations";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useIsPro } from "@/contexts/subscription-context";
+import { useCredits } from "@/hooks/shared/use-credits";
+import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
 
 export default function FoodCards({
   savedMenus,
@@ -41,7 +45,20 @@ export default function FoodCards({
     schema: menuSchema,
   });
 
-  const handleSubmit = () => {
+  const isPro = useIsPro();
+  const { hasCredits, consumeCredit } = useCredits();
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!isPro && !hasCredits) {
+      setShowUpgradeModal(true);
+      return;
+    }
+
+    if (!isPro) {
+      await consumeCredit();
+    }
+
     submit({
       type: "menu",
       context: {
@@ -165,6 +182,11 @@ export default function FoodCards({
           </CardContent>
         </Card>
       )}
+
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+      />
     </>
   );
 }

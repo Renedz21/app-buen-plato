@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import useIngredients from "@/hooks/breakfast/use-ingredients";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
 
@@ -21,6 +21,10 @@ import { Breakfast, defaultIngredients } from "@/constants/breakfasts";
 import CardDetails from "../breakfast/card-details";
 import { breakfastSchema } from "@/types/schemas/ai-recommendations";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useIsPro } from "@/contexts/subscription-context";
+import { useCredits } from "@/hooks/shared/use-credits";
+import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
+import BackButton from "../shared/back-button";
 
 export default function IngredientsClient() {
   const {
@@ -38,7 +42,20 @@ export default function IngredientsClient() {
     schema: breakfastSchema,
   });
 
-  const handleSubmit = () => {
+  const isPro = useIsPro();
+  const { hasCredits, consumeCredit } = useCredits();
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!isPro && !hasCredits) {
+      setShowUpgradeModal(true);
+      return;
+    }
+
+    if (!isPro) {
+      await consumeCredit();
+    }
+
     console.log(selectedIngredients);
     submit({
       type: "breakfast",
@@ -53,6 +70,7 @@ export default function IngredientsClient() {
 
   return (
     <>
+      <BackButton />
       {selectedIngredients.length > 0 && (
         <Card className="mb-6 gap-4 py-4">
           <CardHeader className="gap-0 px-4 md:px-6">
@@ -207,6 +225,11 @@ export default function IngredientsClient() {
           </>
         )}
       </div>
+
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+      />
     </>
   );
 }

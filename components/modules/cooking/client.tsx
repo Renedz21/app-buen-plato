@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/dialog";
 import { type Recipe, recipes } from "@/constants/cooking";
 import { recipeSchema } from "@/types/schemas/ai-recommendations";
+import { useIsPro } from "@/contexts/subscription-context";
+import { useCredits } from "@/hooks/shared/use-credits";
+import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
 
 import CookingRecipeCard from "./cooking-recipe-card";
 
@@ -43,13 +46,27 @@ export default function CookingClient() {
   const [cookingExperience, setCookingExperience] = useState("beginner");
   const [budgetLevel, setBudgetLevel] = useState("medium");
   const [dietaryPreferences, setDietaryPreferences] = useState<string[]>([]);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const { object, submit, isLoading } = useObject({
     api: "/api/cooking",
     schema: recipeSchema,
   });
 
-  const handleGenerateRecipe = () => {
+  const isPro = useIsPro();
+  const { hasCredits, consumeCredit } = useCredits();
+
+  const handleGenerateRecipe = async () => {
+    if (!isPro && !hasCredits) {
+      setShowUpgradeModal(true);
+      setOpen(false);
+      return;
+    }
+
+    if (!isPro) {
+      await consumeCredit();
+    }
+
     submit({
       type: "recipe",
       context: {
@@ -188,6 +205,11 @@ export default function CookingClient() {
       {object && !isLoading && (
         <CookingRecipeCard recipe={object.recipe as Recipe} />
       )}
+
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+      />
     </>
   );
 }
