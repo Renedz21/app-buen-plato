@@ -28,14 +28,14 @@ export default function Navbar() {
             <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl">
               <Image
                 src="/images/nutriya_logo.avif"
-                alt="NutriYa"
+                alt="logo de ¿QuéComo?"
                 width={40}
                 height={40}
                 className="object-contain"
               />
             </div>
             <span className="text-foreground text-xl font-semibold">
-              NutriYa
+              ¿QuéComo?
             </span>
           </Link>
         </div>

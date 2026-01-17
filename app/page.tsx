@@ -49,14 +49,14 @@ export default function Home() {
             <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl">
               <Image
                 src={nutriyaLogo}
-                alt="NutriYa"
+                alt="logo de ¿QuéComo?"
                 width={50}
                 height={40}
                 className="object-contain"
               />
             </div>
             <span className="text-foreground text-xl font-semibold">
-              NutriYa
+              ¿QuéComo?
             </span>
           </div>
           <Button variant="ghost" asChild>
@@ -170,7 +170,7 @@ export default function Home() {
             ¿Listo para empezar?
           </h2>
           <p className="text-muted-foreground mb-8 text-lg">
-            Únete a NutriYa y comienza a tomar mejores decisiones de comida
+            Únete a ¿QuéComo? y comienza a tomar mejores decisiones de comida
             hoy mismo.
           </p>
           <Button size="lg" className="h-14 gap-2 px-8 text-lg" asChild>
@@ -185,7 +185,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-border border-t px-4 py-8">
         <div className="text-muted-foreground container mx-auto text-center text-sm">
-          <p>© 2026 NutriYa. Organizando tus comidas, un plato a la vez.</p>
+          <p>© 2026 ¿QuéComo?. Organizando tus comidas, un plato a la vez.</p>
           <p className="mt-3 text-xs opacity-75">
             Esta aplicación proporciona únicamente contenido informativo y no ofrece asesoramiento médico, nutricional ni profesional.
           </p>

@@ -10,9 +10,9 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "NutriYa",
+  title: "¿QuéComo?",
   description:
-    "NutriYa es un software de apoyo para organizar tus decisiones diarias de comida.",
+    "¿QuéComo? es un software de apoyo para organizar tus decisiones diarias de comida.",
 };
 
 export default function RootLayout({
