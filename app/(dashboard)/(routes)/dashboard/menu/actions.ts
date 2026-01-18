@@ -8,7 +8,7 @@ export async function getSavedMenus() {
 
     if (!user) return;
 
-    const { data, error } = await supabase.from('saved_menus').select('*').eq('user_id', user.id as string);
+    const { data, error } = await supabase.from('saved_menus').select('*').eq('user_id', user.id as string).order('created_at', { ascending: false });
     if (error) {
         throw error;
     }

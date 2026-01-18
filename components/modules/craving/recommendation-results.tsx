@@ -6,11 +6,11 @@ import { RefreshCw, Sparkles, Loader2, AlertTriangle } from "lucide-react";
 interface RecommendationResultsProps {
   recommendations?: Array<
     | {
-        name?: string;
-        price_range?: string;
-        reason?: string;
-        icon?: string;
-      }
+      name?: string;
+      price_range?: string;
+      reason?: string;
+      icon?: string;
+    }
     | undefined
   >;
   tip?: string;
@@ -33,7 +33,7 @@ export default function RecommendationResults({
       {recommendations?.map((recommendation, index) => (
         <Card
           key={index}
-          className="animate-in fade-in slide-in-from-bottom-4 border-0 shadow-md transition-all duration-500 hover:shadow-lg"
+          className="animate-in fade-in slide-in-from-bottom-4 transition-all duration-300 hover:shadow-lg"
           style={{ animationDelay: `${index * 100}ms` }}
         >
           <CardContent className="">
@@ -43,13 +43,8 @@ export default function RecommendationResults({
               </div>
               <div className="flex-1">
                 <div className="flex flex-col items-start justify-start gap-2 md:flex-row md:items-center md:justify-between">
-                  <h3 className="text-foreground font-semibold">
-                    {recommendation?.name || (
-                      <span className="text-muted-foreground flex items-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Generando...
-                      </span>
-                    )}
+                  <h3 className="text-foreground font-semibold text-sm md:text-base w-full max-w-xl">
+                    {recommendation?.name}
                   </h3>
                   {recommendation?.price_range && (
                     <span className="bg-primary/10 text-primary rounded-full px-2 py-1 text-xs font-medium">

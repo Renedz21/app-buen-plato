@@ -10,6 +10,7 @@ import RecommendationResults from "@/components/modules/craving/recommendation-r
 import { useSubscription } from "@/contexts/subscription-context";
 import { useCredits } from "@/hooks/shared/use-credits";
 import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
+import { toast } from "sonner";
 
 export default function CravingClient() {
   const {
@@ -35,16 +36,41 @@ export default function CravingClient() {
   }
 
   const onSubmit = async () => {
-    if (!isPro && !hasCredits) {
-      setShowUpgradeModal(true);
-      return;
-    }
+    try {
+      if (!selectedLocation || !selectedHungerLevel) {
+        toast.error("No se puede analizar", {
+          description: "Por favor, selecciona una ubicación y un nivel de hambre",
+        });
+        return;
+      }
+      if (!isPro && !hasCredits) {
+        setShowUpgradeModal(true);
+        return;
+      }
 
-    if (!isPro) {
-      await consumeCredit();
-    }
+      if (!isPro) {
+        await consumeCredit();
+      }
 
-    handleSubmit();
+      const promise = handleSubmit();
+
+      toast.promise(promise, {
+        loading: "Analizando...",
+        success: "Analizado correctamente",
+        error: "No se puede analizar",
+      });
+
+    } catch (error) {
+      toast.error("Error al analizar", {
+        description: "Por favor, intenta nuevamente",
+        action: {
+          label: "Reintentar",
+          onClick: () => onSubmit(),
+        },
+      });
+    } finally {
+      toast.dismiss();
+    }
   };
 
   return (
@@ -66,7 +92,7 @@ export default function CravingClient() {
           variant="default"
           className="w-full max-w-xs"
           onClick={onSubmit}
-          disabled={isLoading}
+          disabled={isLoading || selectedLocation === null || selectedHungerLevel === null}
         >
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
           {isLoading ? "Analizando..." : "Analizar"}

@@ -4,6 +4,7 @@ import { experimental_useObject as useObject } from "@ai-sdk/react";
 import { useState } from "react";
 import type { HungerLevel, LocationStores } from "@/constants/locations";
 import { snackSchema } from "@/types/schemas/ai-recommendations";
+import { toast } from "sonner";
 
 export function useCravingForm() {
   const [selectedLocation, setSelectedLocation] =
@@ -17,7 +18,7 @@ export function useCravingForm() {
   });
 
   const handleSubmit = async () => {
-    submit({
+    const promise = submit({
       type: "snack",
       context: {
         purchaseLocation: selectedLocation,
@@ -26,6 +27,8 @@ export function useCravingForm() {
         lastMealTime: new Date().toLocaleTimeString(),
       },
     });
+
+    return promise;
   };
 
   const resetForm = () => {
