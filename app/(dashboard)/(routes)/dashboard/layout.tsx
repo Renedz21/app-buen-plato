@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
-  return <section className="mx-auto max-w-4xl">{children}</section>;
+  return <section className="w-full">{children}</section>;
 }

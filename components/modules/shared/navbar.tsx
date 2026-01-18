@@ -8,6 +8,17 @@ import { CreditsDisplay } from "./credits-display";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Navbar() {
   const { user, signOut } = useAuth();
@@ -34,7 +45,7 @@ export default function Navbar() {
                 className="object-contain"
               />
             </div>
-            <span className="text-foreground text-xl font-semibold">
+            <span className="text-foreground text-xl font-semibold sr-only md:not-sr-only">
               ¿QuéComo?
             </span>
           </Link>
@@ -46,9 +57,28 @@ export default function Navbar() {
             <span>{user?.email}</span>
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" onClick={handleSignOut}>
-              <LogOut className="h-5 w-5" />
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>¿Cerrar sesión?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    ¿Estás seguro que deseas cerrar sesión? Tendrás que iniciar
+                    sesión nuevamente para acceder a tu cuenta.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleSignOut}>
+                    Cerrar sesión
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <ModeToggle />
           </div>
         </div>

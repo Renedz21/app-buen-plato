@@ -7,7 +7,7 @@ export const features = [
     id: "menu" as Feature,
     icon: Utensils,
     title: "Optimizador de Menú",
-    description: "Elige la mejor combinación del menú del día",
+    description: "Decide mejor el menú del día",
     color: "bg-primary/10 text-primary",
     isEnabled: true,
   },
