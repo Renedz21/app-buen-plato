@@ -1,27 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
-import {
-  Loader2,
-  CheckCircle,
-  AlertTriangle,
-  Lightbulb,
-} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader2, CheckCircle, AlertTriangle, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { exampleEntradas, examplePlatos } from "@/constants/foods";
 import { useMenuOptimizer } from "@/hooks/menu/use-menu-optimizer";
 import SavedMenus from "./saved-menus";
 import MenuItemCard from "./menu-item-card";
 import type { Tables } from "@/types/database.types";
-import { experimental_useObject as useObject } from "@ai-sdk/react";
-import { menuSchema } from "@/types/schemas/ai-recommendations";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useIsPro } from "@/contexts/subscription-context";
-import { useCredits } from "@/hooks/shared/use-credits";
 import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
 import { SaveMenuModal } from "./save-menu-modal";
 
@@ -33,48 +20,23 @@ export default function FoodCards({
   const {
     entradas,
     platos,
+    object,
+    isLoading,
+    showUpgradeModal,
+    showSaveModal,
+    canAnalyze,
+    canSaveMenu,
+    entradaForm,
+    platoForm,
     addEntrada,
     addPlato,
     removeEntrada,
     removePlato,
-    entradaForm,
-    platoForm,
+    handleAnalyzeMenu,
+    handleOpenSaveModal,
+    handleCloseSaveModal,
+    handleCloseUpgradeModal,
   } = useMenuOptimizer();
-
-  const { object, submit, isLoading } = useObject({
-    api: "/api/menu",
-    schema: menuSchema,
-  });
-
-  const isPro = useIsPro();
-  const { hasCredits, consumeCredit } = useCredits();
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [showSaveModal, setShowSaveModal] = useState(false);
-
-  const handleSubmit = async () => {
-    if (!isPro && !hasCredits) {
-      setShowUpgradeModal(true);
-      return;
-    }
-
-    if (!isPro) {
-      await consumeCredit();
-    }
-
-    submit({
-      type: "menu",
-      context: {
-        currentHour: new Date().getHours(),
-      },
-      data: {
-        entradas,
-        platos,
-      },
-    });
-  };
-
-  const canAnalyze = entradas.length >= 1 && platos.length >= 1;
-  const canSaveMenu = object?.betterOption?.entrada && object?.betterOption?.plato;
 
   return (
     <>
@@ -89,7 +51,7 @@ export default function FoodCards({
           onRemove={removeEntrada}
           form={entradaForm}
           fieldName="entrada"
-          placeholder="Ej: Sopa de pollo"
+          placeholder="Ej: Sopa de pollo, Ensalada César, Ceviche"
           examples={exampleEntradas}
           isLoading={isLoading}
         />
@@ -102,7 +64,7 @@ export default function FoodCards({
           onRemove={removePlato}
           form={platoForm}
           fieldName="plato"
-          placeholder="Ej: Arroz con pollo"
+          placeholder="Ej: Arroz con pollo, Lomo saltado, Pasta carbonara"
           examples={examplePlatos}
           isLoading={isLoading}
         />
@@ -111,7 +73,7 @@ export default function FoodCards({
       <div className="mt-6 text-center">
         <Button 
           size="lg" 
-          onClick={handleSubmit} 
+          onClick={handleAnalyzeMenu} 
           disabled={isLoading || !canAnalyze}
         >
           {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -184,7 +146,7 @@ export default function FoodCards({
                 <div className="mt-4 flex justify-end">
                   <Button
                     variant="outline"
-                    onClick={() => setShowSaveModal(true)}
+                    onClick={handleOpenSaveModal}
                     disabled={!canSaveMenu}
                   >
                     Guardar menú
@@ -198,15 +160,15 @@ export default function FoodCards({
 
       <UpgradeModal
         isOpen={showUpgradeModal}
-        onClose={() => setShowUpgradeModal(false)}
+        onClose={handleCloseUpgradeModal}
       />
 
-      {canSaveMenu && object.betterOption?.entrada && object.betterOption?.plato && (
+      {canSaveMenu && object?.betterOption?.entrada && object?.betterOption?.plato && (
         <SaveMenuModal
           isOpen={showSaveModal}
-          onClose={() => setShowSaveModal(false)}
-          entrada={object.betterOption.entrada!}
-          plato={object.betterOption.plato!}
+          onClose={handleCloseSaveModal}
+          entrada={object.betterOption.entrada}
+          plato={object.betterOption.plato}
         />
       )}
     </>

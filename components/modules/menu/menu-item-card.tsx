@@ -8,6 +8,7 @@ import {
 import { X, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useCallback } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
 interface MenuItemCardProps {
@@ -35,18 +36,17 @@ export default function MenuItemCard({
   examples,
   isLoading = false,
 }: MenuItemCardProps) {
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const value = form.getValues(fieldName);
-      onAdd(value);
-    }
-  };
-
-  const handleAddClick = () => {
+  const handleAddClick = useCallback(() => {
     const value = form.getValues(fieldName);
     onAdd(value);
-  };
+  }, [form, fieldName, onAdd]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddClick();
+    }
+  }, [handleAddClick]);
 
   return (
     <Card>
@@ -73,6 +73,7 @@ export default function MenuItemCard({
                 variant="ghost"
                 onClick={() => onRemove(item)}
                 className="hover:bg-primary/20 rounded-full p-0"
+                disabled={isLoading}
               >
                 <X className="text-primary size-3.5" />
               </Button>
@@ -101,7 +102,7 @@ export default function MenuItemCard({
             {examples.map((item) => (
               <Button
                 key={item}
-                size="xs"
+                size="sm"
                 onClick={() => onAdd(item)}
                 className="bg-muted hover:bg-muted/80 text-muted-foreground"
                 disabled={isLoading}
