@@ -12,10 +12,19 @@ import { Controller } from "react-hook-form";
 import { useAuthActions } from "@/hooks/auth/use-auth-actions";
 import CardLayout from "@/components/modules/auth/card-layout";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { EyeOffIcon, EyeIcon, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 export default function RegisterPage() {
   const { registerForm, handleRegister } = useAuthActions();
+  const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
+  const [isVisibleConfirmPassword, setIsVisibleConfirmPassword] = useState<boolean>(false);
+
+
+  const toggleVisibilityPassword = () => setIsVisiblePassword((prevState) => !prevState);
+  const toggleVisibilityConfirmPassword = () => setIsVisibleConfirmPassword((prevState) => !prevState);
+
+
   return (
     <CardLayout
       title="Crear cuenta"
@@ -75,14 +84,28 @@ export default function RegisterPage() {
                   <FieldLabel htmlFor="form-rhf-input-password">
                     Contraseña
                   </FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-rhf-input-password"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="********"
-                    autoComplete="password"
-                    type="password"
-                  />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      id="form-rhf-input-password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="********"
+                      autoComplete="password"
+                      type={isVisiblePassword ? "text" : "password"}
+                    />
+                    <Button
+                      aria-controls="password"
+                      aria-label={isVisiblePassword ? "Hide password" : "Show password"}
+                      aria-pressed={isVisiblePassword}
+                      variant="ghost"
+                      size="icon"
+                      className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                      onClick={toggleVisibilityPassword}
+                      type="button"
+                    >
+                      {isVisiblePassword ? <EyeOffIcon aria-hidden="true" size={16} /> : <EyeIcon aria-hidden="true" size={16} />}
+                    </Button>
+                  </div>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error?.message ? { message: fieldState.error.message } : undefined]} />
                   )}
@@ -97,14 +120,26 @@ export default function RegisterPage() {
                   <FieldLabel htmlFor="form-rhf-input-confirm-password">
                     Confirmar contraseña
                   </FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-rhf-input-confirm-password"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="********"
-                    autoComplete="confirm-password"
-                    type="password"
-                  />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      id="form-rhf-input-confirm-password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="********"
+                      autoComplete="confirm-password"
+                      type={isVisibleConfirmPassword ? "text" : "password"}
+                      className="pe-9"
+                    />
+                    <Button
+                      onClick={toggleVisibilityConfirmPassword}
+                      variant="ghost"
+                      type="button"
+                      size="icon"
+                      className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {isVisibleConfirmPassword ? <EyeOffIcon aria-hidden="true" size={16} /> : <EyeIcon aria-hidden="true" size={16} />}
+                    </Button>
+                  </div>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error?.message ? { message: fieldState.error.message } : undefined]} />
                   )}
@@ -119,7 +154,7 @@ export default function RegisterPage() {
               >
                 {registerForm.formState.isSubmitting ? (
                   <Loader2 className="animate-spin" />
-                ): "Registrar"}
+                ) : "Registrar"}
               </Button>
             </Field>
           </FieldGroup>

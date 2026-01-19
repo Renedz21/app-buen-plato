@@ -8,6 +8,7 @@ import {
   type SignInFormValues,
   signInSchema,
 } from "@/types/schemas/auth";
+import { toast } from "sonner";
 
 export function useAuthActions() {
   const router = useRouter();
@@ -32,6 +33,7 @@ export function useAuthActions() {
   const handleRegister = async (data: RegisterFormValues) => {
     const { error } = await signUp(data);
     if (error) {
+      toast.error("Error al crear la cuenta. Revisa los campos e intenta nuevamente.");
       throw error;
     }
     router.push("/dashboard");
@@ -40,6 +42,7 @@ export function useAuthActions() {
   const handleSignIn = async (data: SignInFormValues) => {
     const { error } = await signIn(data);
     if (error) {
+      toast.error("Error al iniciar sesión. Revisa los campos e intenta nuevamente.");
       throw error;
     }
     router.push("/dashboard");

@@ -31,8 +31,7 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  const { data } = await supabase.auth.getClaims();
-  const user = data?.claims;
+  const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
 
   // Rutas públicas que no requieren autenticación
@@ -49,7 +48,11 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Si el usuario ESTÁ logueado, puede acceder a cualquier ruta (incluido el landing)
-  // No hacemos nada adicional, dejamos que continúe
+  if (user && publicRoutes.includes(pathname)) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+    return NextResponse.redirect(url)
+  }
 
   return supabaseResponse;
 }
