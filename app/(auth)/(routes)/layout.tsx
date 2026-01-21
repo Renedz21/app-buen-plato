@@ -1,7 +1,19 @@
+import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+};
 
 export default function AuthLayout({ children }: PropsWithChildren) {
   return (

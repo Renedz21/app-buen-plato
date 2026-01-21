@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   Utensils,
   Apple,
@@ -10,6 +11,39 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import nutriyaLogo from "@/public/images/nutriya_logo.avif";
+
+export const metadata: Metadata = {
+  title: "¿QuéComo? - Organiza tus comidas sin esfuerzo",
+  description:
+    "Herramienta gratuita para tomar mejores decisiones de comida. Optimiza menús del día, encuentra ideas para antojos, recetas para 2 días y desayunos en 5 minutos.",
+  keywords: [
+    "que comer hoy",
+    "ideas para comer",
+    "menu del dia",
+    "planificador de comidas",
+    "recetas faciles rapidas",
+    "desayuno en 5 minutos",
+    "meal prep semanal",
+    "que cocinar hoy",
+    "ideas desayuno saludable",
+    "organizar comidas",
+  ],
+  openGraph: {
+    title: "¿QuéComo? - Organiza tus comidas sin esfuerzo",
+    description:
+      "Herramienta gratuita para organizar tus comidas diarias. Optimiza menús, ideas para antojos y recetas rápidas.",
+    url: "https://que-como.vercel.app",
+    type: "website",
+  },
+  twitter: {
+    title: "¿QuéComo? - Organiza tus comidas sin esfuerzo",
+    description:
+      "Herramienta gratuita para organizar tus comidas diarias. Optimiza menús, ideas para antojos y recetas rápidas.",
+  },
+  alternates: {
+    canonical: "https://que-como.vercel.app",
+  },
+};
 
 const features = [
   {
