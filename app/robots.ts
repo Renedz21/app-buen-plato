@@ -6,10 +6,16 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard/", "/api/", "/success/", "/upgrade/"],
+        disallow: [
+          "/dashboard/",
+          "/api/",
+          "/success/",
+          "/upgrade/",
+          "/login",
+          "/register",
+        ],
       },
     ],
     sitemap: "https://que-como.vercel.app/sitemap.xml",
-    host: "https://que-como.vercel.app",
   };
 }
