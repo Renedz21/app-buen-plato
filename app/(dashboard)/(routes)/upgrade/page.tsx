@@ -172,7 +172,7 @@ export default async function UpgradePage() {
           <PlanCard
             key={product.id}
             title={product.name}
-            price={product.name.includes("Pro") ? "USD 9.99" : "USD 0"}
+            price={product.name.includes("Pro") ? "USD 4.99" : "USD 0"}
             priceDescription={
               product.name.includes("Pro")
                 ? "/ mes facturado mensualmente"
