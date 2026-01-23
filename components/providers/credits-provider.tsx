@@ -1,11 +1,11 @@
 "use client";
-
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { CreditsContext } from "@/contexts/credits-context";
 import type { UserCredits } from "@/types/credits";
 
 const supabase = createClient();
+const FREE_CREDITS_LIMIT = 5;
 
 interface CreditsProviderProps {
   children: React.ReactNode;
@@ -18,19 +18,19 @@ export function CreditsProvider({
   userId,
   isPro,
 }: CreditsProviderProps) {
-  const [credits, setCredits] = useState<number>(5);
+  const [credits, setCredits] = useState<number>(FREE_CREDITS_LIMIT);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCredits = useCallback(async () => {
     if (!userId) {
-      setCredits(5);
+      setCredits(FREE_CREDITS_LIMIT);
       setIsLoading(false);
       return;
     }
 
-    // Pro users have unlimited credits
+    // Usuarios Pro tiene creditos ilimitados
     if (isPro) {
-      setCredits(-1); // -1 indicates unlimited
+      setCredits(-1); // -1 indica ilimitado
       setIsLoading(false);
       return;
     }
@@ -51,36 +51,47 @@ export function CreditsProvider({
       return;
     }
 
-    // Initialize if doesn't exist
+    // Inicializa si no existe
     if (!data) {
-      const { data: newCredits } = await supabase
+      const { data: newCredits, error: insertError } = await supabase
         .from("user_credits")
         .insert({
           user_id: userId,
-          credits_remaining: 5,
+          credits_remaining: FREE_CREDITS_LIMIT,
           last_reset_date: today,
         })
         .select()
         .single();
 
-      setCredits(newCredits?.credits_remaining ?? 5);
+      if (insertError) {
+        console.error("Error creating credits record:", insertError);
+        setCredits(0);
+      } else {
+        setCredits(newCredits?.credits_remaining ?? FREE_CREDITS_LIMIT);
+      }
       setIsLoading(false);
       return;
     }
 
-    // Check if needs reset
+    // Verifica si necesita un reseteo
     if (data.last_reset_date !== today) {
-      const { data: resetData } = await supabase
+      const { data: resetData, error: resetError } = await supabase
         .from("user_credits")
         .update({
-          credits_remaining: 5,
+          credits_remaining: FREE_CREDITS_LIMIT,
           last_reset_date: today,
+          updated_at: new Date().toISOString(),
         })
         .eq("user_id", userId)
         .select()
         .single();
 
-      setCredits(resetData?.credits_remaining ?? 5);
+      if (resetError) {
+        console.error("Error resetting credits:", resetError);
+        setCredits(data.credits_remaining);
+      } else {
+        setCredits(resetData?.credits_remaining ?? FREE_CREDITS_LIMIT);
+      }
     } else {
       setCredits(data.credits_remaining);
     }
@@ -92,7 +103,6 @@ export function CreditsProvider({
     fetchCredits();
   }, [fetchCredits]);
 
-  // Real-time subscription to credit changes
   useEffect(() => {
     if (!userId || isPro) return;
 
@@ -108,10 +118,17 @@ export function CreditsProvider({
         },
         (payload) => {
           if (payload.eventType === "DELETE") {
-            setCredits(5);
+            setCredits(FREE_CREDITS_LIMIT);
           } else {
             const newData = payload.new as UserCredits;
-            setCredits(newData.credits_remaining);
+            const today = new Date().toISOString().split("T")[0];
+            
+            // Si cambió la fecha, resetear
+            if (newData.last_reset_date !== today) {
+              setCredits(FREE_CREDITS_LIMIT);
+            } else {
+              setCredits(newData.credits_remaining);
+            }
           }
         },
       )
@@ -124,13 +141,45 @@ export function CreditsProvider({
 
   const consumeCredit = useCallback(async (): Promise<boolean> => {
     if (!userId) return false;
-    if (isPro) return true; // Pro users always have credits
+    if (isPro) return true; // Usuarios Pro siempre tienen creditos
+
+    // Verificar que tiene créditos disponibles
+    if (credits <= 0) {
+      return false;
+    }
 
     // Optimistic update
-    setCredits((prev) => Math.max(0, prev - 1));
+    const newCredits = Math.max(0, credits - 1);
+    setCredits(newCredits);
 
-    return true;
-  }, [userId, isPro]);
+    try {
+      const { data, error } = await supabase
+        .from("user_credits")
+        .update({
+          credits_remaining: newCredits,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error consuming credit:", error);
+        // Revertir el cambio optimista
+        setCredits(credits);
+        return false;
+      }
+
+      // Confirmar con el valor real de la DB
+      setCredits(data.credits_remaining);
+      return true;
+    } catch (error) {
+      console.error("Error consuming credit:", error);
+      // Revertir el cambio optimista
+      setCredits(credits);
+      return false;
+    }
+  }, [userId, isPro, credits]);
 
   const hasCredits = useMemo(() => {
     if (isPro) return true;
