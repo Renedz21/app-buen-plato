@@ -37,11 +37,9 @@ export async function updateSession(request: NextRequest) {
   const userAgent = request.headers.get("user-agent");
   const { pathname } = request.nextUrl;
 
-  // Rutas públicas que no requieren autenticación
+  // Public routes that do not require authentication
   const publicRoutes = ["/", "/login", "/register"];
-  const isPublicRoute = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith("/register"),
-  );
+  const isPublicRoute = publicRoutes.includes(pathname);
 
   // Allow bots to access public routes without redirect
   if (isBot(userAgent) && isPublicRoute) {
@@ -75,14 +73,14 @@ export async function updateSession(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Si el usuario NO está logueado y intenta acceder a una ruta protegida
+  // If user is NOT logged in and tries to access a protected route
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  // Si el usuario ESTÁ logueado, puede acceder a cualquier ruta (incluido el landing)
+  // If user IS logged in, redirect from public routes to dashboard
   if (user && publicRoutes.includes(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
