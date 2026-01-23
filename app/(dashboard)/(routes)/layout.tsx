@@ -1,5 +1,17 @@
 import Navbar from "@/components/modules/shared/navbar";
+import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+};
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   return (
