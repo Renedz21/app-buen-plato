@@ -2,12 +2,17 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { AuthContext } from "@/contexts/auth-context";
-import { SubscriptionProvider } from "@/components/providers/subscription-provider";
 import type { SignInCredentials, SignUpCredentials } from "@/types/auth";
 import type { Session } from "@supabase/supabase-js";
+import { createContext, useContext } from "react";
+import type { AuthContextValue } from "@/types/auth";
+import { SubscriptionProvider } from "./subscription-provider";
 
 const supabase = createClient();
+
+const AuthContext = createContext<AuthContextValue | undefined>(
+  undefined,
+);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -63,8 +68,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={value}>
       <SubscriptionProvider userId={session?.user?.id ?? null}>
+
         {children}
       </SubscriptionProvider>
     </AuthContext.Provider>
   );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }

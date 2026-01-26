@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/components/providers/auth-provider";
 import {
   type RegisterFormValues,
   registerSchema,

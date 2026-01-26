@@ -22,7 +22,7 @@ export default function QuickOptions() {
         style={{ animationDelay: "0.1s" }}
         asChild
       >
-        <Link href="/dashboard/craving" prefetch={true}>
+        <Link href="/dashboard/craving">
           <div className="flex w-full items-center gap-3 sm:gap-4">
             <div className="bg-primary-foreground/20 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-transform group-hover:scale-105 sm:h-16 sm:w-16">
               <Apple className="size-6 sm:size-8" />

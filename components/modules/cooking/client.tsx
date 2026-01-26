@@ -15,11 +15,11 @@ import {
 } from "@/components/ui/dialog";
 import { type Recipe, recipes } from "@/constants/cooking";
 import { recipeSchema } from "@/types/schemas/ai-recommendations";
-import { useIsPro } from "@/contexts/subscription-context";
-import { useCredits } from "@/hooks/shared/use-credits";
 import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
 
 import CookingRecipeCard from "./cooking-recipe-card";
+import { useCredits } from "@/components/providers/credits-provider";
+import { useIsPro } from "@/components/providers/subscription-provider";
 
 const EXPERIENCE_LEVELS = [
   { value: "beginner", label: "Principiante", emoji: "👶" },
@@ -54,17 +54,13 @@ export default function CookingClient() {
   });
 
   const isPro = useIsPro();
-  const { hasCredits, consumeCredit } = useCredits();
+  const { hasCredits } = useCredits();
 
   const handleGenerateRecipe = async () => {
     if (!isPro && !hasCredits) {
       setShowUpgradeModal(true);
       setOpen(false);
       return;
-    }
-
-    if (!isPro) {
-      await consumeCredit();
     }
 
     submit({
@@ -116,11 +112,10 @@ export default function CookingClient() {
                       key={level.value}
                       type="button"
                       onClick={() => setCookingExperience(level.value)}
-                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
-                        cookingExperience === level.value
-                          ? "border-primary bg-primary/5"
-                          : "border-border"
-                      }`}
+                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${cookingExperience === level.value
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
+                        }`}
                     >
                       <span className="text-2xl">{level.emoji}</span>
                       <span className="text-sm font-medium">{level.label}</span>
@@ -139,11 +134,10 @@ export default function CookingClient() {
                       key={budget.value}
                       type="button"
                       onClick={() => setBudgetLevel(budget.value)}
-                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
-                        budgetLevel === budget.value
-                          ? "border-primary bg-primary/5"
-                          : "border-border"
-                      }`}
+                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${budgetLevel === budget.value
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
+                        }`}
                     >
                       <span className="text-2xl">{budget.emoji}</span>
                       <span className="text-sm font-medium">
@@ -164,11 +158,10 @@ export default function CookingClient() {
                       key={pref.value}
                       type="button"
                       onClick={() => togglePreference(pref.value)}
-                      className={`hover:border-primary/50 flex items-center gap-2 rounded-lg border-2 p-3 text-left transition-all ${
-                        dietaryPreferences.includes(pref.value)
-                          ? "border-primary bg-primary/5"
-                          : "border-border"
-                      }`}
+                      className={`hover:border-primary/50 flex items-center gap-2 rounded-lg border-2 p-3 text-left transition-all ${dietaryPreferences.includes(pref.value)
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
+                        }`}
                     >
                       <span className="text-xl">{pref.emoji}</span>
                       <span className="text-sm">{pref.label}</span>

@@ -1,7 +1,7 @@
 export interface UserCredits {
   user_id: string;
   credits_remaining: number;
-  last_reset_date: string;
+  last_reset_timestamp: string;
   created_at: string;
   updated_at: string;
 }

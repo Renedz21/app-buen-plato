@@ -1,7 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
-// Common search engine bots user agents
 const BOT_PATTERNS = [
   "googlebot",
   "bingbot",
@@ -21,7 +20,7 @@ const BOT_PATTERNS = [
   "mj12bot",
   "dotbot",
   "petalbot",
-];
+] as const;
 
 function isBot(userAgent: string | null): boolean {
   if (!userAgent) return false;
@@ -30,24 +29,24 @@ function isBot(userAgent: string | null): boolean {
 }
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request,
-  });
-
-  const userAgent = request.headers.get("user-agent");
   const { pathname } = request.nextUrl;
+  const userAgent = request.headers.get("user-agent");
 
-  // Public routes that do not require authentication
+  // Rutas públicas que no requieren autenticación
   const publicRoutes = ["/", "/login", "/register"];
   const isPublicRoute = publicRoutes.includes(pathname);
 
-  // Allow bots to access public routes without redirect
+  // Permitir que los bots accedan a rutas públicas sin redirección
   if (isBot(userAgent) && isPublicRoute) {
-    return supabaseResponse;
+    return NextResponse.next();
   }
 
-  // With Fluid compute, don't put this client in a global environment
-  // variable. Always create a new one on each request.
+  // Crear respuesta inicial
+  let response = NextResponse.next({
+    request,
+  });
+
+  // Crear cliente de Supabase con manejo correcto de cookies
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
@@ -57,35 +56,54 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
+          // Establecer cookies en el request para que estén disponibles
+          // en Server Components durante esta petición
           cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
+            request.cookies.set(name, value)
           );
-          supabaseResponse = NextResponse.next({
+
+          // Crear nueva respuesta con las cookies actualizadas
+          response = NextResponse.next({
             request,
           });
+
+          // Establecer cookies en la respuesta para que se envíen al navegador
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
+            response.cookies.set(name, value, options)
           );
         },
       },
-    },
+    }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  // CRÍTICO: Usar getUser() en lugar de getSession()
+  // getUser() valida el token con el servidor de Supabase en cada request
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // If user is NOT logged in and tries to access a protected route
+  // Usuario NO autenticado intentando acceder a ruta protegida
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    // Opcional: guardar la URL original para redirección después del login
+    url.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(url);
   }
 
-  // If user IS logged in, redirect from public routes to dashboard
-  if (user && publicRoutes.includes(pathname)) {
+  // Usuario autenticado intentando acceder a rutas públicas de auth
+  if (user && (pathname === "/login" || pathname === "/register")) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
-  return supabaseResponse;
+  // Usuario autenticado en la raíz, redirigir a dashboard
+  if (user && pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
+  }
+
+  return response;
 }

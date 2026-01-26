@@ -7,10 +7,10 @@ import { useCravingForm } from "@/hooks/craving/use-craving-form";
 import LocationSelector from "@/components/modules/craving/location-selector";
 import HungerLevelSelector from "@/components/modules/craving/hunger-level-selector";
 import RecommendationResults from "@/components/modules/craving/recommendation-results";
-import { useSubscription } from "@/contexts/subscription-context";
-import { useCredits } from "@/hooks/shared/use-credits";
+import { useCredits } from "@/components/providers/credits-provider";
 import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
 import { toast } from "sonner";
+import { useSubscription } from "@/components/providers/subscription-provider";
 
 export default function CravingClient() {
   const {
@@ -24,7 +24,7 @@ export default function CravingClient() {
     resetForm,
   } = useCravingForm();
   const { isPro, isLoading: isLoadingSubscription } = useSubscription();
-  const { hasCredits, consumeCredit } = useCredits();
+  const { hasCredits } = useCredits();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   if (isLoadingSubscription) {
@@ -46,10 +46,6 @@ export default function CravingClient() {
       if (!isPro && !hasCredits) {
         setShowUpgradeModal(true);
         return;
-      }
-
-      if (!isPro) {
-        await consumeCredit();
       }
 
       const promise = handleSubmit();

@@ -21,8 +21,8 @@ import { Breakfast, defaultIngredients } from "@/constants/breakfasts";
 import CardDetails from "../breakfast/card-details";
 import { breakfastSchema } from "@/types/schemas/ai-recommendations";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useIsPro } from "@/contexts/subscription-context";
-import { useCredits } from "@/hooks/shared/use-credits";
+import { useIsPro } from "@/components/providers/subscription-provider";
+import { useCredits } from "@/components/providers/credits-provider";
 import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
 import BackButton from "../shared/back-button";
 
@@ -43,17 +43,13 @@ export default function IngredientsClient() {
   });
 
   const isPro = useIsPro();
-  const { hasCredits, consumeCredit } = useCredits();
+  const { hasCredits } = useCredits();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleSubmit = async () => {
     if (!isPro && !hasCredits) {
       setShowUpgradeModal(true);
       return;
-    }
-
-    if (!isPro) {
-      await consumeCredit();
     }
 
     console.log(selectedIngredients);
@@ -114,7 +110,7 @@ export default function IngredientsClient() {
                   className={cn(
                     "bg-secondary text-secondary-foreground hover:bg-primary/80 hover:border-primary dark:bg-secondary/80 dark:text-secondary-foreground/80 dark:hover:bg-primary/80 dark:hover:border-primary border-none hover:cursor-pointer hover:text-white dark:hover:text-white",
                     selectedIngredients.includes(ingredient) &&
-                      "bg-primary dark:bg-primary/80 text-white dark:text-white",
+                    "bg-primary dark:bg-primary/80 text-white dark:text-white",
                   )}
                   onClick={() => addIngredient(ingredient)}
                 >

@@ -1,7 +1,6 @@
 "use client";
 
 import { LogOut, User } from "lucide-react";
-import { useAuth } from "@/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./theme-toggle";
 import { CreditsDisplay } from "./credits-display";
@@ -19,9 +18,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/components/providers/auth-provider";
 
-export default function Navbar() {
-  const { user, signOut } = useAuth();
+export default function Navbar({ email, isPro }: { email: string, isPro: boolean }) {
+  const { signOut } = useAuth();
   const router = useRouter();
   const handleSignOut = async () => {
     await signOut();
@@ -29,7 +29,7 @@ export default function Navbar() {
   };
   return (
     <header className="bg-background/80 border-border sticky top-0 z-50 border-b backdrop-blur-sm">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <Link
             href="/dashboard"
@@ -51,10 +51,10 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="flex items-center gap-3">
-          <CreditsDisplay />
+          <CreditsDisplay isPro={isPro} />
           <div className="text-muted-foreground mr-2 hidden items-center gap-2 text-sm sm:flex">
             <User className="h-4 w-4" />
-            <span>{user?.email}</span>
+            <span>{email}</span>
           </div>
           <div className="flex items-center gap-1">
             <AlertDialog>
@@ -82,7 +82,7 @@ export default function Navbar() {
             <ModeToggle />
           </div>
         </div>
-      </div>
+      </nav>
     </header>
   );
 }

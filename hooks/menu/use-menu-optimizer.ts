@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import { saveMenu } from "@/app/(dashboard)/(routes)/dashboard/menu/actions";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
 import { menuSchema } from "@/types/schemas/ai-recommendations";
-import { useIsPro } from "@/contexts/subscription-context";
-import { useCredits } from "@/hooks/shared/use-credits";
+import { useIsPro } from "@/components/providers/subscription-provider";
+import { useCredits } from "@/components/providers/credits-provider";
+
 
 interface MenuFormValues {
   entrada: string;
@@ -31,7 +32,7 @@ export const useMenuOptimizer = () => {
   });
 
   const isPro = useIsPro();
-  const { hasCredits, consumeCredit } = useCredits();
+  const { hasCredits } = useCredits();
 
   const addEntrada = (entrada: string) => {
     const items = entrada
@@ -88,10 +89,6 @@ export const useMenuOptimizer = () => {
       return;
     }
 
-    if (!isPro) {
-      await consumeCredit();
-    }
-
     submit({
       type: "menu",
       context: {
@@ -102,7 +99,7 @@ export const useMenuOptimizer = () => {
         platos,
       },
     });
-  }, [isPro, hasCredits, consumeCredit, submit, entradas, platos]);
+  }, [isPro, hasCredits, submit, entradas, platos]);
 
   const handleOpenSaveModal = useCallback(() => {
     setShowSaveModal(true);

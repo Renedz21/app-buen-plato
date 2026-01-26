@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+
+import { useEffect, useState, useMemo, useCallback, createContext, useContext } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { SubscriptionContext } from "@/contexts/subscription-context";
-import { CreditsProvider } from "@/components/providers/credits-provider";
 import type { Subscription } from "@/types/subscription";
+
+import type { SubscriptionContextValue } from "@/types/subscription";
 
 const supabase = createClient();
 
@@ -12,6 +13,8 @@ interface SubscriptionProviderProps {
   children: React.ReactNode;
   userId: string | null;
 }
+
+const SubscriptionContext = createContext<SubscriptionContextValue | undefined>(undefined);
 
 function isSubscriptionActive(subscription: Subscription | null): boolean {
   if (!subscription) return false;
@@ -95,9 +98,21 @@ export function SubscriptionProvider({
 
   return (
     <SubscriptionContext.Provider value={value}>
-      <CreditsProvider userId={userId} isPro={isPro}>
-        {children}
-      </CreditsProvider>
+      {children}
     </SubscriptionContext.Provider>
   );
 }
+
+export function useSubscription() {
+  const context = useContext(SubscriptionContext);
+  if (!context) {
+    throw new Error("useSubscription must be used within a SubscriptionProvider");
+  }
+  return context;
+}
+
+export function useIsPro() {
+  const context = useContext(SubscriptionContext);
+  return context?.isPro ?? false;
+}
+
