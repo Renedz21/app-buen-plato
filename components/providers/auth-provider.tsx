@@ -10,9 +10,7 @@ import { SubscriptionProvider } from "./subscription-provider";
 
 const supabase = createClient();
 
-const AuthContext = createContext<AuthContextValue | undefined>(
-  undefined,
-);
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -68,7 +66,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={value}>
       <SubscriptionProvider userId={session?.user?.id ?? null}>
-
         {children}
       </SubscriptionProvider>
     </AuthContext.Provider>
