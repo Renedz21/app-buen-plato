@@ -1,23 +1,26 @@
 "use client";
 
-import { createContext, useContext, useState, useMemo, useTransition } from "react";
-import { consumeCreditAction, refreshCreditsAction } from "@/lib/credits/actions";
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 
 interface CreditsContextValue {
   credits: number;
   hasCredits: boolean;
-  resetTime: string | null;
-  consumeCredit: () => Promise<boolean>;
-  refresh: () => Promise<void>;
-  isConsuming: boolean;
+  decrementCredit: () => void;
 }
 
-const CreditsContext = createContext<CreditsContextValue | undefined>(undefined);
+const CreditsContext = createContext<CreditsContextValue | undefined>(
+  undefined,
+);
 
 interface CreditsProviderProps {
   children: React.ReactNode;
   initialCredits: number;
-  initialResetTime: string | null;
   userId: string | null;
   isPro: boolean;
 }
@@ -25,52 +28,15 @@ interface CreditsProviderProps {
 export function CreditsProvider({
   children,
   initialCredits,
-  initialResetTime,
   userId,
   isPro,
 }: CreditsProviderProps) {
   const [credits, setCredits] = useState(initialCredits);
-  const [resetTime, setResetTime] = useState(initialResetTime);
-  const [isPending, startTransition] = useTransition();
 
-  const consumeCredit = async (): Promise<boolean> => {
-    if (!userId) return false;
-    if (isPro) return true;
-    if (credits <= 0) return false;
-
-    // Optimistic update
-    const previousCredits = credits;
+  const decrementCredit = useCallback(() => {
+    if (isPro) return;
     setCredits((prev) => Math.max(0, prev - 1));
-
-    try {
-      const result = await consumeCreditAction(userId, isPro);
-
-      if (!result.success) {
-        // Revertir si falla
-        setCredits(previousCredits);
-        return false;
-      }
-
-      // Confirmar con el valor real
-      setCredits(result.remaining);
-      return true;
-    } catch (error) {
-      console.error("Error consuming credit:", error);
-      // Revertir
-      setCredits(previousCredits);
-      return false;
-    }
-  };
-
-  const refresh = async () => {
-    if (!userId) return;
-
-    startTransition(async () => {
-      const result = await refreshCreditsAction(userId, isPro);
-      setCredits(result.credits);
-      setResetTime(result.resetTime);
-    });
-  };
+  }, [isPro]);
 
   const hasCredits = useMemo(() => {
     if (isPro) return true;
@@ -81,18 +47,13 @@ export function CreditsProvider({
     () => ({
       credits: isPro ? -1 : credits,
       hasCredits,
-      resetTime,
-      consumeCredit,
-      refresh,
-      isConsuming: isPending,
+      decrementCredit,
     }),
-    [credits, hasCredits, resetTime, isPending, isPro]
+    [credits, hasCredits, decrementCredit, isPro],
   );
 
   return (
-    <CreditsContext.Provider value={value}>
-      {children}
-    </CreditsContext.Provider>
+    <CreditsContext.Provider value={value}>{children}</CreditsContext.Provider>
   );
 }
 

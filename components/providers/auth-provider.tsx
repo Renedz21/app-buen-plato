@@ -1,44 +1,59 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+  createContext,
+  useContext,
+} from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { SignInCredentials, SignUpCredentials } from "@/types/auth";
 import type { Session } from "@supabase/supabase-js";
-import { createContext, useContext } from "react";
 import type { AuthContextValue } from "@/types/auth";
-import { SubscriptionProvider } from "./subscription-provider";
-
-const supabase = createClient();
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const supabaseRef = useRef(createClient());
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
+    let cancelled = false;
+
+    supabaseRef.current.auth.getSession().then(({ data: { session } }) => {
+      if (!cancelled) {
+        setSession(session);
+        setLoading(false);
+      }
     });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setLoading(false);
+    } = supabaseRef.current.auth.onAuthStateChange((_event, session) => {
+      if (!cancelled) {
+        setSession(session);
+        setLoading(false);
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = useCallback(async (credentials: SignInCredentials) => {
-    const { error } = await supabase.auth.signInWithPassword(credentials);
+    const { error } =
+      await supabaseRef.current.auth.signInWithPassword(credentials);
     return { error: error as Error | null };
   }, []);
 
   const signUp = useCallback(async (credentials: SignUpCredentials) => {
-    const { error } = await supabase.auth.signUp({
+    const { error } = await supabaseRef.current.auth.signUp({
       email: credentials.email,
       password: credentials.password,
       options: { data: { name: credentials.name } },
@@ -47,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabaseRef.current.auth.signOut();
     return { error: error as Error | null };
   }, []);
 
@@ -63,13 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [session, loading, signIn, signUp, signOut],
   );
 
-  return (
-    <AuthContext.Provider value={value}>
-      <SubscriptionProvider userId={session?.user?.id ?? null}>
-        {children}
-      </SubscriptionProvider>
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
