@@ -1,5 +1,7 @@
 import Navbar from "@/components/modules/shared/navbar";
 import { CreditsWrapper } from "@/components/providers/credits-wrapper";
+import { SubscriptionWrapper } from "@/components/providers/subscription-wrapper";
+import { getSubscription } from "@/lib/subscription/server";
 import { createClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
@@ -16,7 +18,6 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardLayout({ children }: PropsWithChildren) {
-
   const supabase = await createClient();
 
   const {
@@ -27,23 +28,24 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
     return null;
   }
 
-  // Verificar si el usuario es Pro
-  const { data: subscription } = await supabase
-    .from("subscriptions")
-    .select("status")
-    .eq("user_id", user?.id)
-    .single();
-
-  const isPro = subscription?.status === "active";
+  // React.cache() deduplica: SubscriptionWrapper llama getSubscription
+  // internamente pero es un cache hit (mismos args, mismo request)
+  const { isPro, isCanceled } = await getSubscription(user.id);
 
   return (
     <section className="bg-background grid min-h-dvh grid-rows-[auto_1fr]">
-      <CreditsWrapper userId={user?.id ?? null} isPro={isPro}>
-        <Navbar email={user?.email ?? ""} isPro={isPro} />
-        <main className="container mx-auto max-w-4xl px-4 py-8">
-          {children}
-        </main>
-      </CreditsWrapper>
+      <SubscriptionWrapper userId={user.id}>
+        <CreditsWrapper userId={user.id} isPro={isPro}>
+          <Navbar
+            email={user?.email ?? ""}
+            isPro={isPro}
+            isCanceled={isCanceled}
+          />
+          <main className="container mx-auto max-w-4xl px-4 py-8">
+            {children}
+          </main>
+        </CreditsWrapper>
+      </SubscriptionWrapper>
     </section>
   );
 }

@@ -15,8 +15,5 @@ export interface Subscription {
 }
 
 export interface SubscriptionContextValue {
-  subscription: Subscription | null;
   isPro: boolean;
-  isLoading: boolean;
-  refetch: () => Promise<void>;
 }

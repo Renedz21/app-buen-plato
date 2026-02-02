@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { UserMenu } from "./user-menu";
@@ -7,9 +5,11 @@ import { UserMenu } from "./user-menu";
 export default function Navbar({
   email,
   isPro,
+  isCanceled,
 }: {
   email: string;
   isPro: boolean;
+  isCanceled?: boolean;
 }) {
   return (
     <header className="bg-background/80 border-border sticky top-0 z-50 border-b backdrop-blur-sm">
@@ -34,7 +34,7 @@ export default function Navbar({
             </span>
           </Link>
         </div>
-        <UserMenu email={email} isPro={isPro} />
+        <UserMenu email={email} isPro={isPro} isCanceled={isCanceled} />
       </nav>
     </header>
   );

@@ -5,6 +5,8 @@ import { useState } from "react";
 import type { HungerLevel, LocationStores } from "@/constants/locations";
 import { snackSchema } from "@/types/schemas/ai-recommendations";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 export function useCravingForm() {
   const [selectedLocation, setSelectedLocation] =
@@ -18,13 +20,14 @@ export function useCravingForm() {
   });
 
   const handleSubmit = async () => {
+    const now = new Date();
     const promise = submit({
       type: "snack",
       context: {
         purchaseLocation: selectedLocation,
         hungerLevel: selectedHungerLevel,
-        currentHour: new Date().getHours(),
-        lastMealTime: new Date().toLocaleTimeString(),
+        currentHour: now.getHours(),
+        lastMealTime: format(now, "HH:mm", { locale: es }),
       },
     });
 

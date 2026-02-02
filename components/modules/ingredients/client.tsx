@@ -43,7 +43,7 @@ export default function IngredientsClient() {
   });
 
   const isPro = useIsPro();
-  const { hasCredits } = useCredits();
+  const { hasCredits, decrementCredit } = useCredits();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleSubmit = async () => {
@@ -52,6 +52,7 @@ export default function IngredientsClient() {
       return;
     }
 
+    decrementCredit();
     console.log(selectedIngredients);
     submit({
       type: "breakfast",
@@ -110,7 +111,7 @@ export default function IngredientsClient() {
                   className={cn(
                     "bg-secondary text-secondary-foreground hover:bg-primary/80 hover:border-primary dark:bg-secondary/80 dark:text-secondary-foreground/80 dark:hover:bg-primary/80 dark:hover:border-primary border-none hover:cursor-pointer hover:text-white dark:hover:text-white",
                     selectedIngredients.includes(ingredient) &&
-                    "bg-primary dark:bg-primary/80 text-white dark:text-white",
+                      "bg-primary dark:bg-primary/80 text-white dark:text-white",
                   )}
                   onClick={() => addIngredient(ingredient)}
                 >

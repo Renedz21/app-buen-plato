@@ -14,27 +14,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useCredits } from "@/components/providers/credits-provider";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
-export function UserMenu({ email, isPro }: { email: string; isPro: boolean }) {
+export function UserMenu({
+  email,
+  isPro,
+  isCanceled,
+}: {
+  email: string;
+  isPro: boolean;
+  isCanceled?: boolean;
+}) {
   const { signOut } = useAuth();
   const { credits } = useCredits();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const [showSignOutDialog, setShowSignOutDialog] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -70,6 +66,13 @@ export function UserMenu({ email, isPro }: { email: string; isPro: boolean }) {
                   <Crown className="text-primary h-4 w-4" />
                   <span className="text-primary font-medium">Pro</span>
                 </div>
+              </DropdownMenuItem>
+            ) : isCanceled ? (
+              <DropdownMenuItem asChild>
+                <Link href="/upgrade" className="flex items-center gap-2">
+                  <Crown className="text-muted-foreground h-4 w-4" />
+                  <span className="text-muted-foreground">Pro (Cancelado)</span>
+                </Link>
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem asChild>
@@ -130,7 +133,7 @@ export function UserMenu({ email, isPro }: { email: string; isPro: boolean }) {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onClick={() => setShowSignOutDialog(true)}
+            onClick={handleSignOut}
             className="text-red-600 focus:text-red-600"
           >
             <LogOut className="mr-2 h-4 w-4" />
@@ -138,24 +141,6 @@ export function UserMenu({ email, isPro }: { email: string; isPro: boolean }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <AlertDialog open={showSignOutDialog} onOpenChange={setShowSignOutDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Cerrar sesión?</AlertDialogTitle>
-            <AlertDialogDescription>
-              ¿Estás seguro que deseas cerrar sesión? Tendrás que iniciar sesión
-              nuevamente para acceder a tu cuenta.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleSignOut}>
-              Cerrar sesión
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }
