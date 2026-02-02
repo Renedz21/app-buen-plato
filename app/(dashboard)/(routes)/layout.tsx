@@ -16,7 +16,6 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardLayout({ children }: PropsWithChildren) {
-
   const supabase = await createClient();
 
   const {
@@ -35,11 +34,16 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
     .single();
 
   const isPro = subscription?.status === "active";
+  const isCanceled = subscription?.status === "canceled";
 
   return (
     <section className="bg-background grid min-h-dvh grid-rows-[auto_1fr]">
       <CreditsWrapper userId={user?.id ?? null} isPro={isPro}>
-        <Navbar email={user?.email ?? ""} isPro={isPro} />
+        <Navbar
+          email={user?.email ?? ""}
+          isPro={isPro}
+          isCanceled={isCanceled}
+        />
         <main className="container mx-auto max-w-4xl px-4 py-8">
           {children}
         </main>

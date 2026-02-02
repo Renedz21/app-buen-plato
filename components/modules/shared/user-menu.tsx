@@ -29,7 +29,15 @@ import { useCredits } from "@/components/providers/credits-provider";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-export function UserMenu({ email, isPro }: { email: string; isPro: boolean }) {
+export function UserMenu({
+  email,
+  isPro,
+  isCanceled,
+}: {
+  email: string;
+  isPro: boolean;
+  isCanceled?: boolean;
+}) {
   const { signOut } = useAuth();
   const { credits } = useCredits();
   const { theme, setTheme } = useTheme();
@@ -70,6 +78,13 @@ export function UserMenu({ email, isPro }: { email: string; isPro: boolean }) {
                   <Crown className="text-primary h-4 w-4" />
                   <span className="text-primary font-medium">Pro</span>
                 </div>
+              </DropdownMenuItem>
+            ) : isCanceled ? (
+              <DropdownMenuItem asChild>
+                <Link href="/upgrade" className="flex items-center gap-2">
+                  <Crown className="text-muted-foreground h-4 w-4" />
+                  <span className="text-muted-foreground">Pro (Cancelado)</span>
+                </Link>
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem asChild>
