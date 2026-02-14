@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import nutriyaLogo from "@/public/images/nutriya_logo.avif";
+import logo from "@/public/images/que-como-logo.webp";
 
 export const metadata: Metadata = {
   title: "¿QuéComo? - Organiza tus comidas sin esfuerzo",
@@ -82,7 +82,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl">
               <Image
-                src={nutriyaLogo}
+                src={logo}
                 alt="logo de ¿QuéComo?"
                 width={50}
                 height={40}
@@ -166,8 +166,8 @@ export default function Home() {
           </h2>
           <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-lg">
             Creemos en la mejora progresiva, no en la perfección. Pequeños
-            cambios sostenibles que se acumulan con el tiempo para facilitar
-            tu día a día.
+            cambios sostenibles que se acumulan con el tiempo para facilitar tu
+            día a día.
           </p>
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="p-6">
@@ -221,7 +221,8 @@ export default function Home() {
         <div className="text-muted-foreground container mx-auto text-center text-sm">
           <p>© 2026 ¿QuéComo?. Organizando tus comidas, un plato a la vez.</p>
           <p className="mt-3 text-xs opacity-75">
-            Esta aplicación proporciona únicamente contenido informativo y no ofrece asesoramiento médico, nutricional ni profesional.
+            Esta aplicación proporciona únicamente contenido informativo y no
+            ofrece asesoramiento médico, nutricional ni profesional.
           </p>
         </div>
       </footer>

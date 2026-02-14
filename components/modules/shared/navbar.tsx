@@ -20,9 +20,9 @@ export default function Navbar({
             prefetch={false}
             className="flex items-center gap-2"
           >
-            <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl">
+            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl">
               <Image
-                src="/images/nutriya_logo.avif"
+                src="/images/que-como-logo.webp"
                 alt="logo de ¿QuéComo?"
                 width={40}
                 height={40}

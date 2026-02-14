@@ -39,7 +39,7 @@ All SEO settings are centralized in `lib/seo-config.ts`. This file exports:
 - **Web Manifest**: PWA-ready with app icons and theme colors
 - **Dynamic Images**: OG and Twitter images generated with Next.js Image Generation API
 - **Structured Data**: JSON-LD schema for WebApplication
-- **Logo Integration**: Uses `nutriya_logo.avif` across all social media images
+- **Logo Integration**: Uses `que-como-logo.webp` across all social media images
 
 ### Files Structure
 
@@ -65,7 +65,7 @@ public/
 │   ├── icon-192.svg        # PWA icon
 │   └── icon-512.svg        # PWA icon
 └── images/
-    └── nutriya_logo.avif   # App logo
+    └── que-como-logo.webp   # App logo
 ```
 
 ### Customization

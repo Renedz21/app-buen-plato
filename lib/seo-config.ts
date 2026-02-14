@@ -5,8 +5,8 @@ const defineMetadata = <T extends Metadata>(metadata: T) => metadata;
 export const publicUrl = "https://que-como.vercel.app";
 
 export const logoUrl = new URL(
-  "/images/nutriya_logo.avif",
-  publicUrl
+  "/images/que-como-logo.webp",
+  publicUrl,
 ).toString();
 
 export const seoConfig = defineMetadata({
@@ -32,7 +32,6 @@ export const seoConfig = defineMetadata({
   authors: [{ name: "¿QuéComo?" }],
   creator: "¿QuéComo?",
   publisher: "¿QuéComo?",
-  themeColor: "#c2410c",
   openGraph: {
     type: "website",
     locale: "es_ES",
@@ -98,7 +97,7 @@ export const jsonLdSchema = {
     "Desayunos en 5 minutos",
     "Recordatorios de hidratación",
   ],
-  logo: `${publicUrl}/images/nutriya_logo.avif`,
+  logo: `${publicUrl}/images/que-como-logo.webp`,
 };
 
 export default seoConfig;

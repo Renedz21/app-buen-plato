@@ -1,16 +1,17 @@
-import { Geist } from "next/font/google";
+import { Geist, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import ToastProvider from "@/components/providers/toast-provider";
 import { seoConfig, jsonLdSchema } from "@/lib/seo-config";
+import { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-export const metadata = seoConfig;
+export const metadata: Metadata = seoConfig;
 
 export default function RootLayout({
   children,
