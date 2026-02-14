@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -10,7 +9,7 @@ import RecommendationResults from "@/components/modules/craving/recommendation-r
 import { useCredits } from "@/components/providers/credits-provider";
 import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
 import { toast } from "sonner";
-import { useSubscription } from "@/components/providers/subscription-provider";
+import { useIsPro } from "@/components/providers/subscription-provider";
 
 export default function CravingClient() {
   const {
@@ -23,23 +22,16 @@ export default function CravingClient() {
     handleSubmit,
     resetForm,
   } = useCravingForm();
-  const { isPro, isLoading: isLoadingSubscription } = useSubscription();
-  const { hasCredits } = useCredits();
+  const isPro = useIsPro();
+  const { hasCredits, decrementCredit } = useCredits();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-
-  if (isLoadingSubscription) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin" />
-      </div>
-    );
-  }
 
   const onSubmit = async () => {
     try {
       if (!selectedLocation || !selectedHungerLevel) {
         toast.error("No se puede analizar", {
-          description: "Por favor, selecciona una ubicación y un nivel de hambre",
+          description:
+            "Por favor, selecciona una ubicación y un nivel de hambre",
         });
         return;
       }
@@ -48,6 +40,7 @@ export default function CravingClient() {
         return;
       }
 
+      decrementCredit();
       const promise = handleSubmit();
 
       toast.promise(promise, {
@@ -55,7 +48,6 @@ export default function CravingClient() {
         success: "Analizado correctamente",
         error: "No se puede analizar",
       });
-
     } catch (error) {
       toast.error("Error al analizar", {
         description: "Por favor, intenta nuevamente",
@@ -71,36 +63,50 @@ export default function CravingClient() {
 
   return (
     <>
-      <LocationSelector
-        selectedLocation={selectedLocation}
-        onSelectLocation={setSelectedLocation}
-        isLoading={isLoading}
-      />
+      {isLoading ? (
+        <div className="flex h-full items-center justify-center">
+          <Loader2 className="h-10 w-10 animate-spin" />
+        </div>
+      ) : (
+        <>
+          <LocationSelector
+            selectedLocation={selectedLocation}
+            onSelectLocation={setSelectedLocation}
+            isLoading={isLoading}
+          />
 
-      <HungerLevelSelector
-        selectedHungerLevel={selectedHungerLevel}
-        onSelectHungerLevel={setSelectedHungerLevel}
-        isLoading={isLoading}
-      />
+          <HungerLevelSelector
+            selectedHungerLevel={selectedHungerLevel}
+            onSelectHungerLevel={setSelectedHungerLevel}
+            isLoading={isLoading}
+          />
 
-      <div className="mt-4 flex justify-center">
-        <Button
-          variant="default"
-          className="w-full max-w-xs"
-          onClick={onSubmit}
-          disabled={isLoading || selectedLocation === null || selectedHungerLevel === null}
-        >
-          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-          {isLoading ? "Analizando..." : "Analizar"}
-        </Button>
-      </div>
+          <div className="mt-4 flex justify-center">
+            <Button
+              variant="default"
+              className="w-full max-w-xs"
+              onClick={onSubmit}
+              disabled={
+                isLoading ||
+                selectedLocation === null ||
+                selectedHungerLevel === null
+              }
+            >
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              {isLoading ? "Analizando..." : "Analizar"}
+            </Button>
+          </div>
+        </>
+      )}
 
-      <RecommendationResults
-        recommendations={recommendations?.recommendations}
-        tip={recommendations?.tip}
-        avoid={recommendations?.avoid}
-        onReset={resetForm}
-      />
+      {!isLoading && (
+        <RecommendationResults
+          recommendations={recommendations?.recommendations}
+          tip={recommendations?.tip}
+          avoid={recommendations?.avoid}
+          onReset={resetForm}
+        />
+      )}
 
       <UpgradeModal
         isOpen={showUpgradeModal}

@@ -14,20 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useCredits } from "@/components/providers/credits-provider";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
 export function UserMenu({
   email,
@@ -42,7 +31,6 @@ export function UserMenu({
   const { credits } = useCredits();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const [showSignOutDialog, setShowSignOutDialog] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -145,7 +133,7 @@ export function UserMenu({
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onClick={() => setShowSignOutDialog(true)}
+            onClick={handleSignOut}
             className="text-red-600 focus:text-red-600"
           >
             <LogOut className="mr-2 h-4 w-4" />
@@ -153,24 +141,6 @@ export function UserMenu({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <AlertDialog open={showSignOutDialog} onOpenChange={setShowSignOutDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Cerrar sesión?</AlertDialogTitle>
-            <AlertDialogDescription>
-              ¿Estás seguro que deseas cerrar sesión? Tendrás que iniciar sesión
-              nuevamente para acceder a tu cuenta.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleSignOut}>
-              Cerrar sesión
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }

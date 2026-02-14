@@ -54,7 +54,7 @@ export default function CookingClient() {
   });
 
   const isPro = useIsPro();
-  const { hasCredits } = useCredits();
+  const { hasCredits, decrementCredit } = useCredits();
 
   const handleGenerateRecipe = async () => {
     if (!isPro && !hasCredits) {
@@ -71,6 +71,7 @@ export default function CookingClient() {
         dietaryPreferences,
       },
     });
+    decrementCredit();
     setOpen(false);
   };
 
@@ -112,10 +113,11 @@ export default function CookingClient() {
                       key={level.value}
                       type="button"
                       onClick={() => setCookingExperience(level.value)}
-                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${cookingExperience === level.value
-                        ? "border-primary bg-primary/5"
-                        : "border-border"
-                        }`}
+                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
+                        cookingExperience === level.value
+                          ? "border-primary bg-primary/5"
+                          : "border-border"
+                      }`}
                     >
                       <span className="text-2xl">{level.emoji}</span>
                       <span className="text-sm font-medium">{level.label}</span>
@@ -134,10 +136,11 @@ export default function CookingClient() {
                       key={budget.value}
                       type="button"
                       onClick={() => setBudgetLevel(budget.value)}
-                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${budgetLevel === budget.value
-                        ? "border-primary bg-primary/5"
-                        : "border-border"
-                        }`}
+                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
+                        budgetLevel === budget.value
+                          ? "border-primary bg-primary/5"
+                          : "border-border"
+                      }`}
                     >
                       <span className="text-2xl">{budget.emoji}</span>
                       <span className="text-sm font-medium">
@@ -158,10 +161,11 @@ export default function CookingClient() {
                       key={pref.value}
                       type="button"
                       onClick={() => togglePreference(pref.value)}
-                      className={`hover:border-primary/50 flex items-center gap-2 rounded-lg border-2 p-3 text-left transition-all ${dietaryPreferences.includes(pref.value)
-                        ? "border-primary bg-primary/5"
-                        : "border-border"
-                        }`}
+                      className={`hover:border-primary/50 flex items-center gap-2 rounded-lg border-2 p-3 text-left transition-all ${
+                        dietaryPreferences.includes(pref.value)
+                          ? "border-primary bg-primary/5"
+                          : "border-border"
+                      }`}
                     >
                       <span className="text-xl">{pref.emoji}</span>
                       <span className="text-sm">{pref.label}</span>
