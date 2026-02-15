@@ -32,7 +32,6 @@ export default function IngredientsClient() {
     handleAddIngredients,
     handleInputChange,
     handleKeyDown,
-    handleRemoveSelectedIngredient,
     inputValue,
     selectedIngredients,
   } = useIngredients();
@@ -53,7 +52,6 @@ export default function IngredientsClient() {
     }
 
     decrementCredit();
-    console.log(selectedIngredients);
     submit({
       type: "breakfast",
       context: {
@@ -68,34 +66,6 @@ export default function IngredientsClient() {
   return (
     <>
       <BackButton />
-      {selectedIngredients.length > 0 && (
-        <Card className="mb-6 gap-4 py-4">
-          <CardHeader className="gap-0 px-4 md:px-6">
-            <CardTitle>
-              Ingredientes seleccionados ({selectedIngredients.length}):
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-2 px-4 md:px-6">
-            {selectedIngredients.map((ing) => (
-              <div
-                key={ing}
-                className="bg-primary/10 text-primary flex items-center gap-2 rounded-full px-3 py-1"
-              >
-                <span className="text-sm">{ing}</span>
-                <Button
-                  size="icon-xs"
-                  variant="ghost"
-                  onClick={() => handleRemoveSelectedIngredient(ing)}
-                  className="hover:bg-primary/20 text-primary rounded-full p-0.5 transition-colors"
-                >
-                  <X className="text-primary" />
-                </Button>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
       <div className="space-y-4">
         {Object.keys(defaultIngredients).map((category) => (
           <Fragment key={category}>

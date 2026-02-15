@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/public/images/que-como-logo.webp";
+import { ModeToggle } from "@/components/modules/shared/theme-toggle";
 
 export const metadata: Metadata = {
   title: "¿QuéComo? - Organiza tus comidas sin esfuerzo",
@@ -80,7 +81,7 @@ export default function Home() {
       <header className="bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl">
+            <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl p-1">
               <Image
                 src={logo}
                 alt="logo de ¿QuéComo?"
@@ -89,13 +90,16 @@ export default function Home() {
                 className="object-contain"
               />
             </div>
-            <span className="text-foreground text-xl font-semibold">
+            <span className="text-foreground sr-only text-xl font-semibold md:not-sr-only">
               ¿QuéComo?
             </span>
           </div>
-          <Button variant="ghost" asChild>
-            <Link href="/login">Iniciar sesión</Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/login">Iniciar sesión</Link>
+            </Button>
+            <ModeToggle />
+          </div>
         </div>
       </header>
 

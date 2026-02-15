@@ -7,11 +7,11 @@ export default function useIngredients() {
   const addIngredient = (ingredient: string) => {
     if (!selectedIngredients.includes(ingredient)) {
       setSelectedIngredients([...selectedIngredients, ingredient]);
+    } else {
+      setSelectedIngredients(
+        selectedIngredients.filter((i) => i !== ingredient),
+      );
     }
-  };
-
-  const removeIngredient = (ingredient: string) => {
-    setSelectedIngredients(selectedIngredients.filter((i) => i !== ingredient));
   };
 
   const addCustomIngredient = (ingredient: string) => {
@@ -55,24 +55,12 @@ export default function useIngredients() {
     setInputValue("");
   };
 
-  const handleRemoveSelectedIngredient = (ingredient: string) => {
-    if (selectedIngredients.includes(ingredient)) {
-      setSelectedIngredients(
-        selectedIngredients.filter((i) => i !== ingredient),
-      );
-    } else {
-      removeIngredient(ingredient);
-    }
-  };
-
   return {
     selectedIngredients,
     inputValue,
     addIngredient,
-    removeIngredient,
     handleInputChange,
     handleKeyDown,
     handleAddIngredients,
-    handleRemoveSelectedIngredient,
   };
 }

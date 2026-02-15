@@ -20,7 +20,7 @@ export default function Navbar({
             prefetch={false}
             className="flex items-center gap-2"
           >
-            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl">
+            <div className="bg-primary/10 flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl p-1">
               <Image
                 src="/images/que-como-logo.webp"
                 alt="logo de ¿QuéComo?"

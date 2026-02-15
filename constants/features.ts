@@ -8,7 +8,7 @@ export const features = [
     icon: Utensils,
     title: "Optimizador de Menú",
     description: "Decide mejor el menú del día",
-    color: "bg-primary/10 text-primary",
+    color: "bg-primary/10 text-primary dark:bg-primary/15",
     isEnabled: true,
   },
   {
@@ -16,7 +16,7 @@ export const features = [
     icon: ChefHat,
     title: "Cocina para 2 Días",
     description: "Recetas simples que duran",
-    color: "bg-secondary/70 text-secondary-foreground",
+    color: "bg-primary/10 text-primary dark:bg-primary/15",
     isEnabled: true,
   },
   {
@@ -24,7 +24,7 @@ export const features = [
     icon: Clock,
     title: "Desayuno en 5 Min",
     description: "Ideas rápidas para la mañana",
-    color: "bg-accent/70 text-accent-foreground",
+    color: "bg-primary/10 text-primary dark:bg-primary/15",
     isEnabled: true,
   },
   {
@@ -32,7 +32,7 @@ export const features = [
     icon: Droplets,
     title: "Hidratación",
     description: "Recordatorios para tomar agua",
-    color: "bg-secondary/70 text-secondary-foreground",
+    color: "bg-primary/10 text-primary dark:bg-primary/15",
     isEnabled: false,
   },
 ];

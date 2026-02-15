@@ -28,7 +28,7 @@ export default function BreakfastClient() {
         <Link href="/dashboard/breakfast/recipes" prefetch={false}>
           <CardContent className="p-6 text-center">
             <div className="bg-accent mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl">
-              <Lightbulb className="text-secondary-foreground h-6 w-6" />
+              <Lightbulb className="text-secondary-foreground dark:text-secondary h-6 w-6" />
             </div>
             <h3 className="text-foreground mb-2 font-semibold">
               Ver todas las ideas
