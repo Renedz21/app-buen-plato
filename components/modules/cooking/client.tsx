@@ -1,9 +1,13 @@
 "use client";
 
-import { experimental_useObject as useObject } from "@ai-sdk/react";
-import { ChefHat, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { Loader2 } from "lucide-react";
+
+import { type Recipe, recipes } from "@/constants/cooking";
+import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
+
 import { Button } from "@/components/ui/button";
+import Vault from "@/components/modules/shared/vault";
+import CookingRecipeCard from "./cooking-recipe-card";
 import {
   Dialog,
   DialogContent,
@@ -13,184 +17,96 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { type Recipe, recipes } from "@/constants/cooking";
-import { recipeSchema } from "@/types/schemas/ai-recommendations";
-import { UpgradeModal } from "@/components/modules/shared/upgrade-modal";
-
-import CookingRecipeCard from "./cooking-recipe-card";
-import { useCredits } from "@/components/providers/credits-provider";
-import { useIsPro } from "@/components/providers/subscription-provider";
-
-const EXPERIENCE_LEVELS = [
-  { value: "beginner", label: "Principiante", emoji: "👶" },
-  { value: "intermediate", label: "Intermedio", emoji: "👨‍🍳" },
-  { value: "advanced", label: "Avanzado", emoji: "⭐" },
-] as const;
-
-const BUDGET_LEVELS = [
-  { value: "low", label: "Económico", emoji: "💰" },
-  { value: "medium", label: "Moderado", emoji: "💵" },
-  { value: "high", label: "Flexible", emoji: "💸" },
-] as const;
-
-const DIETARY_PREFERENCES = [
-  { value: "vegetariano", label: "Vegetariano", emoji: "🥬" },
-  { value: "vegano", label: "Vegano", emoji: "🌱" },
-  { value: "sin-gluten", label: "Sin Gluten", emoji: "🌾" },
-  { value: "sin-lactosa", label: "Sin Lactosa", emoji: "🥛" },
-  { value: "bajo-en-sodio", label: "Bajo en Sodio", emoji: "🧂" },
-] as const;
+import CookingSelection from "./cooking-selection";
+import useCooking from "@/hooks/cooking/use-cooking";
 
 export default function CookingClient() {
-  const [open, setOpen] = useState(false);
-  const [cookingExperience, setCookingExperience] = useState("beginner");
-  const [budgetLevel, setBudgetLevel] = useState("medium");
-  const [dietaryPreferences, setDietaryPreferences] = useState<string[]>([]);
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-
-  const { object, submit, isLoading } = useObject({
-    api: "/api/cooking",
-    schema: recipeSchema,
-  });
-
-  const isPro = useIsPro();
-  const { hasCredits, decrementCredit } = useCredits();
-
-  const handleGenerateRecipe = async () => {
-    if (!isPro && !hasCredits) {
-      setShowUpgradeModal(true);
-      setOpen(false);
-      return;
-    }
-
-    submit({
-      type: "recipe",
-      context: {
-        cookingExperience,
-        budgetLevel,
-        dietaryPreferences,
-      },
-    });
-    decrementCredit();
-    setOpen(false);
-  };
-
-  const togglePreference = (pref: string) => {
-    setDietaryPreferences((prev) =>
-      prev.includes(pref) ? prev.filter((p) => p !== pref) : [...prev, pref],
-    );
-  };
-
+  const {
+    budgetLevel,
+    cookingExperience,
+    dietaryPreferences,
+    handleGenerateRecipe,
+    isDesktop,
+    isLoading,
+    object,
+    open,
+    setBudgetLevel,
+    setCookingExperience,
+    setOpen,
+    setShowUpgradeModal,
+    showUpgradeModal,
+    togglePreference,
+  } = useCooking();
   return (
     <>
-      <div className="mb-6 flex justify-end">
+      {isDesktop ? (
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button size="lg" className="gap-2">
-              {isLoading ? "Generando..." : "Generar Receta con IA"}
-              {isLoading && <Loader2 className="size-4 animate-spin" />}
-            </Button>
+            <Button>Generar Receta</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="sm:max-w-xl">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-xl">
-                <ChefHat className="size-6" />
-                Crea tu Receta Personalizada
-              </DialogTitle>
+              <DialogTitle>Crea tu Receta Personalizada</DialogTitle>
               <DialogDescription>
                 Cuéntanos sobre ti para generar la receta perfecta
               </DialogDescription>
             </DialogHeader>
-
-            <div className="space-y-6 py-4">
-              <div className="space-y-3">
-                <label className="text-sm font-medium">
-                  ¿Cuánta experiencia tienes cocinando?
-                </label>
-                <div className="grid grid-cols-3 gap-3">
-                  {EXPERIENCE_LEVELS.map((level) => (
-                    <button
-                      key={level.value}
-                      type="button"
-                      onClick={() => setCookingExperience(level.value)}
-                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
-                        cookingExperience === level.value
-                          ? "border-primary bg-primary/5"
-                          : "border-border"
-                      }`}
-                    >
-                      <span className="text-2xl">{level.emoji}</span>
-                      <span className="text-sm font-medium">{level.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-sm font-medium">
-                  ¿Cuál es tu presupuesto?
-                </label>
-                <div className="grid grid-cols-3 gap-3">
-                  {BUDGET_LEVELS.map((budget) => (
-                    <button
-                      key={budget.value}
-                      type="button"
-                      onClick={() => setBudgetLevel(budget.value)}
-                      className={`hover:border-primary/50 flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
-                        budgetLevel === budget.value
-                          ? "border-primary bg-primary/5"
-                          : "border-border"
-                      }`}
-                    >
-                      <span className="text-2xl">{budget.emoji}</span>
-                      <span className="text-sm font-medium">
-                        {budget.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-sm font-medium">
-                  Preferencias dietéticas (opcional)
-                </label>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {DIETARY_PREFERENCES.map((pref) => (
-                    <button
-                      key={pref.value}
-                      type="button"
-                      onClick={() => togglePreference(pref.value)}
-                      className={`hover:border-primary/50 flex items-center gap-2 rounded-lg border-2 p-3 text-left transition-all ${
-                        dietaryPreferences.includes(pref.value)
-                          ? "border-primary bg-primary/5"
-                          : "border-border"
-                      }`}
-                    >
-                      <span className="text-xl">{pref.emoji}</span>
-                      <span className="text-sm">{pref.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
+            <CookingSelection
+              cookingExperience={cookingExperience}
+              setCookingExperience={setCookingExperience}
+              budgetLevel={budgetLevel}
+              setBudgetLevel={setBudgetLevel}
+              togglePreference={togglePreference}
+              dietaryPreferences={dietaryPreferences}
+            />
             <DialogFooter>
               <Button
-                variant="outline"
-                onClick={() => setOpen(false)}
-                disabled={isLoading}
+                size="lg"
+                className="gap-2"
+                onClick={handleGenerateRecipe}
               >
-                Cancelar
-              </Button>
-              <Button onClick={handleGenerateRecipe} disabled={isLoading}>
-                {isLoading ? "Generando..." : "Generar Receta"}
+                {isLoading ? "Generando..." : "Generar"}
+                {isLoading && <Loader2 className="size-4 animate-spin" />}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
-
+      ) : (
+        <div className="mb-6 flex w-full flex-1 justify-center">
+          <Vault
+            title="Crea tu Receta Personalizada"
+            description="Cuéntanos sobre ti para generar la receta perfecta"
+            footer={
+              <Button
+                size="lg"
+                className="w-full gap-2"
+                onClick={handleGenerateRecipe}
+              >
+                {isLoading ? "Generando..." : "Generar"}
+                {isLoading && <Loader2 className="size-4 animate-spin" />}
+              </Button>
+            }
+            trigger={
+              <Button size="lg" className="w-full gap-2">
+                Generar Receta con IA
+              </Button>
+            }
+            isOpen={open}
+            onOpenChange={setOpen}
+          >
+            <div className="no-scrollbar space-y-6 overflow-y-auto px-4">
+              <CookingSelection
+                cookingExperience={cookingExperience}
+                setCookingExperience={setCookingExperience}
+                budgetLevel={budgetLevel}
+                setBudgetLevel={setBudgetLevel}
+                togglePreference={togglePreference}
+                dietaryPreferences={dietaryPreferences}
+              />
+            </div>
+          </Vault>
+        </div>
+      )}
       <div className="animate-in fade-in slide-in-from-bottom-5 grid grid-cols-1 gap-4 delay-150 duration-300 md:grid-cols-2">
         {recipes.map((recipe: Recipe) => (
           <CookingRecipeCard key={recipe.id} recipe={recipe} />

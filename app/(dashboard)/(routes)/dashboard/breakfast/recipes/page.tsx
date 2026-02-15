@@ -3,10 +3,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronRight, Clock, Info } from "lucide-react";
 import CardDetails from "@/components/modules/breakfast/card-details";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import BackButton from "@/components/modules/shared/back-button";
 
 export default function BreakfastRecipesPage() {
   return (
     <>
+      <BackButton />
+
       <Alert variant="info" className="mb-8">
         <Info className="h-4 w-4" />
         <AlertTitle>Recetas actualizadas</AlertTitle>

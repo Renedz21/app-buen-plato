@@ -42,7 +42,7 @@ export function UserMenu({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full">
-            <User className="h-5 w-5" />
+            <User className="size-6" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">

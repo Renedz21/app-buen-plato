@@ -21,11 +21,8 @@ export async function validateAndConsumeCredit(
     .eq("user_id", userId)
     .single();
 
-  console.log({ existingCredits });
-
   // Initialize credits if user doesn't have a record yet
   if (!existingCredits) {
-    console.log("Creating new credits");
     const { data: newCredits, error: insertError } = await supabase
       .from("user_credits")
       .insert({
@@ -59,13 +56,6 @@ export async function validateAndConsumeCredit(
   const lastResetDate = new Date(existingCredits.last_reset_timestamp);
   const resetTime = addHours(lastResetDate, 24);
   const needsReset = isAfter(now, resetTime);
-
-  console.log({
-    lastResetDate: lastResetDate.toISOString(),
-    resetTime: resetTime.toISOString(),
-    now: now.toISOString(),
-    needsReset,
-  });
 
   if (needsReset) {
     // Reset to 5 credits

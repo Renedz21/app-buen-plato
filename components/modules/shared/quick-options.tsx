@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { features } from "@/constants/features";
+import { cn } from "@/lib/utils";
 import { Apple } from "lucide-react";
 import Link from "next/link";
 
@@ -28,7 +29,7 @@ export default function QuickOptions() {
               <Apple className="size-6 sm:size-8" />
             </div>
             <div className="min-w-0 flex-1 text-left">
-              <h2 className="text-lg font-semibold leading-tight sm:text-xl md:text-2xl">
+              <h2 className="text-lg leading-tight font-semibold sm:text-xl md:text-2xl">
                 ¿Tienes hambre?
               </h2>
               <p className="text-primary-foreground/80 text-sm leading-relaxed sm:text-base">
@@ -59,12 +60,15 @@ export default function QuickOptions() {
             >
               <div className="flex w-full items-start gap-3 sm:gap-4">
                 <div
-                  className={`h-10 w-10 shrink-0 sm:h-12 sm:w-12 ${feature.color} flex items-center justify-center rounded-xl transition-transform group-hover:scale-105`}
+                  className={cn(
+                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-105 sm:h-12 sm:w-12",
+                    feature.color,
+                  )}
                 >
                   <feature.icon className="size-5 sm:size-6" />
                 </div>
                 <div className="min-w-0 flex-1 text-left">
-                  <h3 className="text-foreground text-sm font-semibold leading-tight sm:text-base">
+                  <h3 className="text-foreground text-sm leading-tight font-semibold sm:text-base">
                     {feature.isEnabled
                       ? feature.title
                       : "Próximamente estará disponible"}

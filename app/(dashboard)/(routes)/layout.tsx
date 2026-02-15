@@ -41,7 +41,7 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
             isPro={isPro}
             isCanceled={isCanceled}
           />
-          <main className="container mx-auto max-w-4xl px-4 py-8">
+          <main className="container mx-auto max-w-4xl p-4 md:py-8">
             {children}
           </main>
         </CreditsWrapper>
